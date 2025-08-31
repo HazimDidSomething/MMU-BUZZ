@@ -1,25 +1,25 @@
-from flask import Blueprint ,render_template,request,flash,redirect,url_for
+from flask import Blueprint ,render_template,request,flash,redirect,url_for,jsonify
 from sqlalchemy import inspect
 from . import db
+from flask_login import login_user, login_required,logout_user,current_user
+from .models import User
+
 
 DBinfo = Blueprint('DBinfo',__name__)
 
 @DBinfo.route('/DB_INFO')
 def show_db_info():
-    inspector = inspect(db.engine)
-    tables_info = {}
+    # Get all users
+    users = User.query.all()
 
-    # Loop through all tables
-    for table_name in inspector.get_table_names():
-        columns = inspector.get_columns(table_name)
-        tables_info[table_name] = [col["name"] + " (" + str(col["type"]) + ")" for col in columns]
+    # Build dictionary with details
+    user_data = []
+    for u in users:
+        user_data.append({
+            "id": u.id,
+            "email": u.email,
+            "name": u.FirstName,
+            "password": u.password
+        })
 
-    # Print to console
-    print("=== Database Info ===")
-    for table, cols in tables_info.items():
-        print(f"Table: {table}")
-        for col in cols:
-            print(f"  - {col}")
-
-    # Return in browser too
-    return tables_info, render_template("home.html") 
+    return jsonify({"users": user_data})
