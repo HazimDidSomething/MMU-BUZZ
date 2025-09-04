@@ -2,7 +2,6 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 
-
 '''
 # not adding  [ may use this for posting / other ]
 class Note(db.Model):
@@ -13,12 +12,34 @@ class Note(db.Model):
 '''
 
 class User(db.Model, UserMixin):
-    id = db.Column(db.Integer, primary_key = True)
+    id = db.Column(db.Integer, primary_key=True)
     email = db.Column(db.String(150), unique=True)
     password = db.Column(db.String(150))
     FirstName = db.Column(db.String(150))
     '''
-    posts = db.relationship('Post)
+    posts = db.relationship('Post')
     '''
+
+# table for groups
+class Group(db.Model):
+    __tablename__ = "groups"
+
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(150), unique=True, nullable=False)
+    description = db.Column(db.Text, nullable=True)
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())
+
+    def __repr__(self):
+        return f"<Group {self.name}>"
+
+# table for group memberships (users joining groups)
+class GroupMember(db.Model):
+    __tablename__ = "group_members"
+
+    id = db.Column(db.Integer, primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
+    group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
+    joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
+
 
  
