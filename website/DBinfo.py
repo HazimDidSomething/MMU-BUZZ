@@ -1,7 +1,5 @@
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,jsonify
-from sqlalchemy import inspect
 from . import db
-from flask_login import login_user, login_required,logout_user,current_user
 from .models import User
 
 
@@ -19,7 +17,8 @@ def show_db_info():
             "id": u.id,
             "email": u.email,
             "name": u.FirstName,
-            "password": u.password
+            "password": u.password,
+            "Role": u.Role
         })
 
     return jsonify({"users": user_data})
