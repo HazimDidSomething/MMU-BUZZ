@@ -1,5 +1,21 @@
 {% extends "base.html" %} 
 {% block title %} Home {% endblock %}
 
-{% block content %} <h1>this is the home page</h1> 
+{% block content %}
+  <h1>this is the home page</h1>
+
+  <h2>Available Groups:</h2>
+  <ul>
+    {% for group in groups %}
+      <li><strong>{{ group.name }}</strong> - {{ group.description }}</li>
+    {% else %}
+      <li>No groups available.</li>
+    {% endfor %}
+  </ul>
 {% endblock %}
+
+
+
+
+
+
