@@ -6,12 +6,16 @@ db = SQLAlchemy()
 DB_name = "database.db"
 
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '[|_MMU_)(!BUZZ#)-=1?[|]'
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_name}'
     
     db.init_app(app)
+    from .models import User, Group, GroupMember
+    CreateDatabase(app)
+    
 
 
 
@@ -25,7 +29,7 @@ def create_app():
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(Profile,url_prefix='/')
     
-    from .models import User
+    from .models import User, Group, GroupMember
 
     CreateDatabase(app)
     login_manager = LoginManager()
