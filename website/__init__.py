@@ -22,13 +22,12 @@ def create_app():
     from .views import views
     from .auth import auth
     from .DBinfo import DBinfo
-    
-
-
+    from .Profile import Profile
 
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
+    app.register_blueprint(Profile,url_prefix='/')
     
     from .models import User, Group, GroupMember
 
@@ -43,9 +42,23 @@ def create_app():
     return app
 
 def CreateDatabase(app):
+    from .models import User
+    from werkzeug.security import generate_password_hash
     if not path.exists('website/' + DB_name):
         with app.app_context():
             db.create_all()
-        print("Database and tables created!")
+            print("Created Database!!!")
+            if not User.query.filter_by(email="mod@mmu.edu.my").first():
+                new_mod = User(
+                email="mod@mmu.edu.my",
+                FirstName="mod123",
+                password=generate_password_hash("HAZIM171544",method ='pbkdf2:sha256'),
+                Role="moderator"   
+                )
 
+                db.session.add(new_mod)
+                db.session.commit()
+                print("Moderator added successfully!")
+            else:
+                pass
 
