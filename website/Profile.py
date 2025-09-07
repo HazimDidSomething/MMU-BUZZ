@@ -4,12 +4,15 @@ from .models import User
 from flask_login import login_user, login_required,logout_user,current_user
 from werkzeug.security import check_password_hash
 from . import db
+from .models import Posts
 
 Profile = Blueprint('profile',__name__)
 
 @Profile.route('/Profile')
 def show_profile():
-    return render_template('Profile.html',user=current_user)
+
+    posts = Posts.query.filter_by(user_id = current_user.id).all()
+    return render_template('Profile.html',user=current_user,posts=posts)
 @Profile.route("/delete_account", methods=['GET','POST'])
 def del_acc():
     

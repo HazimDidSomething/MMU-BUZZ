@@ -2,7 +2,6 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
-  <h1>this is the home page</h1>
 
   <h2>Available Groups:</h2>
   <ul>
@@ -12,6 +11,36 @@
       <li>No groups available.</li>
     {% endfor %}
   </ul>
+
+
+
+
+  <h1 class = "mb-4">Latest Post</h1>
+  <div class="overflow-auto" style="max-height: 70vh;">
+  {% for post in posts %}
+  <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
+    <div class="card">
+    <div class="card-body">
+      <h5 class="mb-0">{{post.title}}</h5>
+      <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
+      <h6 class="card-text">{{post.content}}</h6>
+
+    </div>
+    </div>
+    <div class = "pt-4"></div>
+  </a>
+  {% else %}
+         <p>No posts yet. Be the first to           
+            <a href="/Create_Post" class="btn btn-outline-info">
+                    Create One !
+                </a></p>
+  {% endfor %}
+  </div>
+
+
+
+
+
 {% endblock %}
 
 

@@ -2,17 +2,47 @@
 {% block title %} Profile  {% endblock %}
 
 {% block content %} 
-<h1>{{ current_user.FirstName }}'s Profile:</h1>
-<div class="pt-3"></div>
-<h3><b>ID:</b> {{ current_user.id }}</h3>
-<h3><b>Email:</b> {{ current_user.email }}</h3>
-<h3><b>Role:</b> {{ current_user.Role }}</h3>
-<div class="pt-5"></div>
+    <h1>{{ current_user.FirstName }}'s Profile:</h1>
+    <div class="pt-3"></div>
+    <h3><b>ID:</b> {{ current_user.id }}</h3>
+    <h3><b>Email:</b> {{ current_user.email }}</h3>
+    <h3><b>Role:</b> {{ current_user.Role }}</h3>
+    <div class="pt-5"></div>
 
-<a href="{{ url_for('profile.del_acc') }}" 
-    <button type="submit" class="btn btn-outline-danger btn-sm"
-            onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
-        ACCOUNT DELETION
-    </button>
-</a>
+    <a href="/logout">
+        <button type="submit" class="btn btn-outline-secondary btn-bg">
+            Logout
+        </button>
+    </a>
+
+    <a href="{{ url_for('profile.del_acc') }}" >
+        <button type="submit" class="btn btn-outline-danger btn-sm"
+                onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
+            ACCOUNT DELETION
+        </button>
+    </a>
+
+
+
+    <h1 class = "mb-4">Your Posts</h1>
+    <div class="overflow-auto" style="max-height: 50vh;">
+    {% for post in posts %}
+    <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
+        <div class="card">
+        <div class="card-body">
+        <h5 class="mb-0">{{post.title}}</h5>
+        <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
+        <h6 class="card-text">{{post.content}}</h6>
+
+        </div>
+        </div>
+        <div class = "pt-4"></div>
+    </a>
+    {% else %}
+        <p>No posts yet. make your first one right now!!           
+            <a href="/Create_Post" class="btn btn-outline-info">
+                    POST
+                </a></p>
+    {% endfor %}
+    </div>
 {% endblock %}
