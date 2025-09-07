@@ -17,17 +17,17 @@ def create_app():
     CreateDatabase(app)
     
 
-
-
     from .views import views
     from .auth import auth
     from .DBinfo import DBinfo
     from .Profile import Profile
+    from .PostHandle import PostHandle
 
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(Profile,url_prefix='/')
+    app.register_blueprint(PostHandle,url_prefix='/')
     
     from .models import User, Group, GroupMember
 
