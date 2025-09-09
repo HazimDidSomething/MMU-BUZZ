@@ -11,3 +11,6 @@ def home():
     posts = Posts.query.order_by(Posts.date.desc()).all()
     groups = Group.query.all()
     return render_template("home.html", user=current_user, groups=groups,posts=posts)
+@views.route("/ping")
+def ping():
+    return "pong", 200
