@@ -4,7 +4,8 @@ from . import db
 from flask_login import current_user
 from werkzeug.utils import secure_filename
 import os
-
+UPLOAD_FOLDER = os.path.join("website", "static", "uploads")
+os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 PostHandle = Blueprint('post',__name__)
 
 @PostHandle.route('/Create_Post', methods=['GET','POST'])
