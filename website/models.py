@@ -8,10 +8,10 @@ class Posts(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
-    images = db.relationship("PostsImg", backref="post", lazy=True)
+    images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
 
 class PostsImg(db.Model):
     __tablename__ = "Posts_img"
