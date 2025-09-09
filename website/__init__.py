@@ -10,7 +10,7 @@ DB_name = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '[|_MMU_)(!BUZZ#)-=1?[|]'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_name}'
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql://root:TK3iZBD0rLadW6gqn4OcwlSHIDbvY4ie@dpg-d304ajndiees738v9dsg-a/database_v3od"
     
     db.init_app(app)
     from .models import User, Group, GroupMember
