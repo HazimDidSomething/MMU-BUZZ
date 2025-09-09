@@ -10,13 +10,11 @@ DB_name = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '[|_MMU_)(!BUZZ#)-=1?[|]'
-    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg://root:TK3iZBD0rLadW6gqn4OcwlSHIDbvY4ie@dpg-d304ajndiees738v9dsg-a:5432/database_v3od"
+    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_name}'
     
     db.init_app(app)
     from .models import User, Group, GroupMember
-    with app.app_context():
-        db.create_all()
-        Createmoderator()
+    CreateDatabase(app)
     
 
     from .views import views
@@ -32,6 +30,8 @@ def create_app():
     app.register_blueprint(PostHandle,url_prefix='/')
     
     from .models import User, Group, GroupMember
+
+    CreateDatabase(app)
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
@@ -41,11 +41,14 @@ def create_app():
         return User.query.get(int(id))
     return app
 
-def Createmoderator():
+def CreateDatabase(app):
     from .models import User
     from werkzeug.security import generate_password_hash
-
-    if not User.query.filter_by(email="mod@mmu.edu.my").first():
+    if not path.exists('website/' + DB_name):
+        with app.app_context():
+            db.create_all()
+            print("Created Database!!!")
+            if not User.query.filter_by(email="mod@mmu.edu.my").first():
                 new_mod = User(
                 email="mod@mmu.edu.my",
                 FirstName="mod123",
@@ -56,6 +59,5 @@ def Createmoderator():
                 db.session.add(new_mod)
                 db.session.commit()
                 print("Moderator added successfully!")
-    else:
+            else:
                 pass
-

@@ -11,6 +11,17 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
+    images = db.relationship("PostsImg", backref="post", lazy=True)
+
+class PostsImg(db.Model):
+    __tablename__ = "Posts_img"
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
+    name = db.Column(db.Text, nullable= False)
+    mimetype = db.Column(db.Text,nullable= False)
+
+
+
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
