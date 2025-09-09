@@ -8,6 +8,9 @@
     <div class="card">
         <div class="card-body">
             <h3 class="card-text text-wrap">{{post.content}}</h3>
+        {% if img %}
+            <img src="{{ url_for('static', filename='uploads/' ~ img.name) }}" alt="Post image" width="300">
+        {% endif %}
         </div>
     </div>
 

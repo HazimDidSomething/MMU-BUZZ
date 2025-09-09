@@ -2,7 +2,7 @@
 {% block title %} Create Post {% endblock %}
 
 {% block content %}
-<form method="post">
+<form method="post" enctype="multipart/form-data">
     <h3 align="center">Create a Post</h3>
     <div class="form-group">
     <label for="title">Titel</label>
@@ -38,9 +38,10 @@
     />
     </div>
     <br/>
+    <div class="form-group">
+        <input type="file" name="PIC">
+    </div>
     <button type="submit" class="btn btn-outline-success btn-lg">POST!</button>
-
-
 </form>
 {% endblock %}
 
