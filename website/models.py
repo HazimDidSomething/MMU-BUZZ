@@ -9,7 +9,7 @@ class Posts(db.Model):
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    group_id  = db.Column(db.Integer,nullable=True)
+    # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
 
 class User(db.Model, UserMixin):

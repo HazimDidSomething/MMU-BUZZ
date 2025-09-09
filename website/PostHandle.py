@@ -12,12 +12,16 @@ def CreatePost():
     if request.method == "POST":
         title = request.form.get("title")
         content = request.form.get("content")
+        '''
+        quick fix
         group_id = request.form.get("group_id")
+        '''
+        
         new_post = Posts(
             title = title,
             content = content,
             user_id = current_user.id,
-            group_id = group_id,
+           # group_id = group_id,
             FirstName = current_user.FirstName
         )
 
