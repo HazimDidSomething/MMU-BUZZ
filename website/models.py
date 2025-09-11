@@ -33,9 +33,9 @@ class User(db.Model, UserMixin):
     posts = db.relationship('Post')
     '''
 
-# table for groups
-class Group(db.Model):
-    __tablename__ = "groups"
+# table for communities
+class test(db.Model):
+    __tablename__ = "communities"
 
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(150), unique=True, nullable=False)
@@ -43,15 +43,15 @@ class Group(db.Model):
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
     def __repr__(self):
-        return f"<Group {self.name}>"
+        return f"<Communities {self.name}>"
 
-# table for group memberships (users joining groups)
-class GroupMember(db.Model):
-    __tablename__ = "group_members"
+# table for communities memberships 
+class CommunityMember(db.Model):
+    __tablename__ = "communities_members"
 
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    group_id = db.Column(db.Integer, db.ForeignKey("groups.id"), nullable=False)
+    community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
 
