@@ -23,7 +23,9 @@ def create_app():
     from .Profile import Profile
     from .PostHandle import PostHandle
     from .community import community
+    from  .dm import dm
 
+    app.register_blueprint(dm,url_prefix='/')
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')

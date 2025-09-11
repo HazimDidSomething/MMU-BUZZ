@@ -54,5 +54,9 @@ class CommunityMember(db.Model):
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
+'''
 
- 
+ class DM(db.Model):
+    pass
+
+'''
