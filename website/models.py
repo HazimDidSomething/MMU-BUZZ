@@ -9,6 +9,8 @@ class Posts(db.Model):
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    upvote = db.Column(db.Integer)
+    downvote = db.Column(db.Integer)
     # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
     images = db.relationship("PostsImg", backref="post", lazy=True)
@@ -20,7 +22,11 @@ class PostsImg(db.Model):
     name = db.Column(db.Text, nullable= False)
     mimetype = db.Column(db.Text,nullable= False)
 
-
+class PostLike(db.Model):
+    __tablename__ ="PostLike"
+    id = db.Column(db.Integer,  primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
 
 
 class User(db.Model, UserMixin):

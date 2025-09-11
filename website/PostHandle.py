@@ -29,7 +29,7 @@ def CreatePost():
         db.session.add(new_post)
         db.session.commit()
         if PIC and PIC.filename != "":
-            print("herer")
+            #print("herer")
 
             filename = secure_filename(PIC.filename)
             PIC.save(os.path.join("website/static/uploads", filename))
