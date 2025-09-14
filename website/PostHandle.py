@@ -1,7 +1,7 @@
 from .models import Posts,PostsImg
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
-from flask_login import current_user
+from flask_login import current_user,login_required
 from werkzeug.utils import secure_filename
 import os
 UPLOAD_FOLDER = os.path.join("website", "static", "uploads")
@@ -9,6 +9,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 PostHandle = Blueprint('post',__name__)
 
 @PostHandle.route('/Create_Post', methods=['GET','POST'])
+@login_required
 def CreatePost():
     if request.method == "POST":
         title = request.form.get("title")
@@ -24,13 +25,14 @@ def CreatePost():
             content = content,
             user_id = current_user.id,
            # group_id = group_id,
-            FirstName = current_user.FirstName
+            FirstName = current_user.FirstName,
+            vote = 0
         )
 
         db.session.add(new_post)
         db.session.commit()
         if PIC and PIC.filename != "":
-            print("herer")
+            #print("herer")
 
             filename = secure_filename(PIC.filename)
             PIC.save(os.path.join("website/static/uploads", filename))
@@ -50,7 +52,46 @@ def CreatePost():
     return render_template("CreatePost.html", user = current_user)
 
 @PostHandle.route("/post/<int:post_id>")
+@login_required
 def ViewPost(post_id):
     post =Posts.query.get_or_404(post_id)
-    img = PostsImg.query.filter_by(post_id=post_id).first() 
+    img = PostsImg.query.filter_by(post_id=post_id).first()
     return render_template("viewpost.html",post=post,user = current_user,img=img)
+
+@PostHandle.route("/post/upvote/<int:post_id>")
+@login_required
+def upvote(post_id):
+    if current_user.votes_remaining <= 0:
+        flash("You have no votes left!", category='error')
+        return redirect(url_for("post.ViewPost", post_id=post_id))
+    else:
+        post = Posts.query.get_or_404(post_id)
+        upvote_num = Posts.vote
+        post.vote = upvote_num + 1
+        UserVote = current_user.votes_remaining
+        current_user.votes_remaining = UserVote - 1
+        print(current_user.votes_remaining)
+        print("upvote")
+        db.session.commit()
+        img = PostsImg.query.filter_by(post_id=post_id).first()
+
+        return redirect(url_for("post.ViewPost", post_id=post_id))
+
+@PostHandle.route("/post/downvote/<int:post_id>")
+@login_required
+def downvote(post_id):
+    if current_user.votes_remaining <= 0:
+        flash("You have no votes left!", category='error')
+        return redirect(url_for("post.ViewPost", post_id=post_id))
+    else:
+        post = Posts.query.get_or_404(post_id)
+        downvote_num = Posts.vote
+        post.vote = downvote_num -  1
+        UserVote = current_user.votes_remaining
+        current_user.votes_remaining = UserVote - 1
+        print(current_user.votes_remaining)
+        print("downvote")
+        db.session.commit()
+        img = PostsImg.query.filter_by(post_id=post_id).first()
+
+        return redirect(url_for("post.ViewPost", post_id=post_id))

@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from datetime import date
 
 class Posts(db.Model):
     __tablename__ = "Posts"
@@ -8,6 +9,8 @@ class Posts(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
@@ -20,8 +23,12 @@ class PostsImg(db.Model):
     name = db.Column(db.Text, nullable= False)
     mimetype = db.Column(db.Text,nullable= False)
 
-
-
+class PostLike(db.Model):
+    __tablename__ ="PostLike"
+    id = db.Column(db.Integer,  primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
+   
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,9 +36,9 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     FirstName = db.Column(db.String(150))
     Role = db.Column(db.String(50), default="user")
-    '''
-    posts = db.relationship('Post')
-    '''
+    votes_remaining = db.Column(db.Integer, default=10)
+    reset_time = db.Column(db.Date,default=lambda: date.today())
+
 
 # table for communities
 class test(db.Model):

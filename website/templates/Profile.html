@@ -7,10 +7,11 @@
     <h3><b>ID:</b> {{ current_user.id }}</h3>
     <h3><b>Email:</b> {{ current_user.email }}</h3>
     <h3><b>Role:</b> {{ current_user.Role }}</h3>
+    <h3><b>Vote's Left:</b> {{current_user.votes_remaining}}</h3>
     <div class="pt-5"></div>
 
     <a href="/logout">
-        <button type="submit" class="btn btn-outline-secondary btn-bg">
+        <button type="submit" class="btn btn-outline-secondary btn-sm">
             Logout
         </button>
     </a>
