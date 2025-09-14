@@ -13,7 +13,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_name}'
     
     db.init_app(app)
-    from .models import User, Group, GroupMember
+    from .models import User, test, CommunityMember
     CreateDatabase(app)
     
 
@@ -22,14 +22,16 @@ def create_app():
     from .DBinfo import DBinfo
     from .Profile import Profile
     from .PostHandle import PostHandle
+    from .community import community
 
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(Profile,url_prefix='/')
     app.register_blueprint(PostHandle,url_prefix='/')
+    app.register_blueprint(community,url_prefix='/')
     
-    from .models import User, Group, GroupMember
+    from .models import User, test, CommunityMember
 
     CreateDatabase(app)
     login_manager = LoginManager()
@@ -52,7 +54,7 @@ def CreateDatabase(app):
                 new_mod = User(
                 email="mod@mmu.edu.my",
                 FirstName="mod123",
-                password=generate_password_hash("HAZIM171544",method ='pbkdf2:sha256'),
+                password=generate_password_hash("1234567",method ='pbkdf2:sha256'),
                 Role="moderator"   
                 )
 

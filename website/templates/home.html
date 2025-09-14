@@ -3,12 +3,12 @@
 
 {% block content %}
 
-  <h2>Available Groups:</h2>
+  <h2>Available Community:</h2>
   <ul>
-    {% for group in groups %}
-      <li><strong>{{ group.name }}</strong> - {{ group.description }}</li>
+    {% for community in community %}
+      <li><strong>{{ community.name }}</strong> - {{ community.description }}</li>
     {% else %}
-      <li>No groups available.</li>
+      <li>No community available.</li>
     {% endfor %}
   </ul>
 
