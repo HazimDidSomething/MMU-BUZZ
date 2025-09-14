@@ -13,6 +13,7 @@ def create_app():
     app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg://root:TK3iZBD0rLadW6gqn4OcwlSHIDbvY4ie@dpg-d304ajndiees738v9dsg-a:5432/database_v3od"
 
     db.init_app(app)
+    import os
     import cloudinary
     import cloudinary.uploader
 
