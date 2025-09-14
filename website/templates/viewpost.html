@@ -10,7 +10,7 @@
             <h3 class="card-text text-wrap">{{post.content}}</h3>
             <div class="card">
                 {% if img %}
-                    <img src="{{ url_for('static', filename='uploads/' ~ img.name) }}" alt="Post image" width="300">
+                    <img src="{{ img.name }}" alt="Post image" width="300">
                 {% endif %}
             </div>
         </div>

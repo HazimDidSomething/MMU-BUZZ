@@ -4,6 +4,8 @@ from . import db
 from flask_login import current_user,login_required
 from werkzeug.utils import secure_filename
 import os
+import cloudinary.uploader
+
 UPLOAD_FOLDER = os.path.join("website", "static", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 PostHandle = Blueprint('post',__name__)
@@ -34,13 +36,12 @@ def CreatePost():
         if PIC and PIC.filename != "":
             #print("herer")
 
-            filename = secure_filename(PIC.filename)
-            PIC.save(os.path.join("website/static/uploads", filename))
-            mimetype = PIC.mimetype
+            upload_result = cloudinary.uploader.upload(PIC)
+            img_url = upload_result["secure_url"]
             img_add = PostsImg(
                 post_id = new_post.id,
-                name = filename,
-                mimetype = mimetype )
+                name=img_url,          
+                mimetype=PIC.mimetype )
             db.session.add(img_add)
             db.session.commit()
         else:
