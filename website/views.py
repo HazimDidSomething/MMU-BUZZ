@@ -2,6 +2,8 @@ from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .models import test
 from .models import Posts,PostsImg
+from datetime import date
+from . import db
 
 views = Blueprint('views', __name__)
 
@@ -10,6 +12,10 @@ views = Blueprint('views', __name__)
 def home():
     posts = Posts.query.order_by(Posts.date.desc()).all()
     communities = test.query.all()
+    if current_user.reset_time != date.today():
+        current_user.votes_remaining = 10
+        current_user.reset_time = date.today()
+        db.session.commit()
     return render_template("home.html", user=current_user, communities=communities,posts=posts)
 @views.route("/ping")
 def ping():
