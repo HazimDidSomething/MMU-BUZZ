@@ -24,6 +24,7 @@ def create_app():
     )
     from .models import User, test, CommunityMember
     with app.app_context():
+        db.drop_all()
         db.create_all()
         Createmoderator()
 
