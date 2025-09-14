@@ -9,11 +9,13 @@ from .models import Posts
 Profile = Blueprint('profile',__name__)
 
 @Profile.route('/Profile')
+@login_required
 def show_profile():
 
     posts = Posts.query.filter_by(user_id = current_user.id).all()
     return render_template('Profile.html',user=current_user,posts=posts)
 @Profile.route("/delete_account", methods=['GET','POST'])
+@login_required
 def del_acc():
     
     if request.method == "POST":
