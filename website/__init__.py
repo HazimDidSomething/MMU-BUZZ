@@ -22,7 +22,7 @@ def create_app():
     api_key = os.getenv("493434864335775"), 
     api_secret = os.getenv("1raBkmg7lhVHr7fJxzutLLMPrz4")
     )
-    from .models import User, Group, GroupMember
+    from .models import User, test, CommunityMember
     with app.app_context():
         db.create_all()
         Createmoderator()
@@ -42,7 +42,7 @@ def create_app():
     app.register_blueprint(PostHandle,url_prefix='/')
     app.register_blueprint(community,url_prefix='/')
 
-    from .models import User, Group, GroupMember
+    from .models import User, test, CommunityMember
 
 
     login_manager = LoginManager()
