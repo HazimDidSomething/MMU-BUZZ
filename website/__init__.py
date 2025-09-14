@@ -10,12 +10,22 @@ DB_name = "database.db"
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '[|_MMU_)(!BUZZ#)-=1?[|]'
-    app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_name}'
-    
+    app.config['SQLALCHEMY_DATABASE_URI'] = "postgresql+psycopg://root:TK3iZBD0rLadW6gqn4OcwlSHIDbvY4ie@dpg-d304ajndiees738v9dsg-a:5432/database_v3od"
+
     db.init_app(app)
-    from .models import User, test, CommunityMember
-    CreateDatabase(app)
-    
+    import cloudinary
+    import cloudinary.uploader
+
+    cloudinary.config( 
+    cloud_name = os.getenv("degsaqcd3"), 
+    api_key = os.getenv("493434864335775"), 
+    api_secret = os.getenv("1raBkmg7lhVHr7fJxzutLLMPrz4")
+    )
+    from .models import User, Group, GroupMember
+    with app.app_context():
+        db.create_all()
+        Createmoderator()
+
 
     from .views import views
     from .auth import auth
@@ -30,36 +40,36 @@ def create_app():
     app.register_blueprint(Profile,url_prefix='/')
     app.register_blueprint(PostHandle,url_prefix='/')
     app.register_blueprint(community,url_prefix='/')
-    
-    from .models import User, test, CommunityMember
 
-    CreateDatabase(app)
+    from .models import User, Group, GroupMember
+
+
     login_manager = LoginManager()
     login_manager.login_view = 'auth.login'
     login_manager.init_app(app)
-   
+
     @login_manager.user_loader
     def load_user(id):
         return User.query.get(int(id))
     return app
 
-def CreateDatabase(app):
+def Createmoderator():
     from .models import User
     from werkzeug.security import generate_password_hash
-    if not path.exists('website/' + DB_name):
-        with app.app_context():
-            db.create_all()
-            print("Created Database!!!")
-            if not User.query.filter_by(email="mod@mmu.edu.my").first():
+
+    if not User.query.filter_by(email="mod@mmu.edu.my").first():
+
+
+
                 new_mod = User(
                 email="mod@mmu.edu.my",
                 FirstName="mod123",
-                password=generate_password_hash("1234567",method ='pbkdf2:sha256'),
+                password=generate_password_hash("HAZIM171544",method ='pbkdf2:sha256'),
                 Role="moderator"   
                 )
 
                 db.session.add(new_mod)
                 db.session.commit()
                 print("Moderator added successfully!")
-            else:
+    else:
                 pass
