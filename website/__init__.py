@@ -4,7 +4,7 @@ from os import path
 from flask_login import LoginManager
 db = SQLAlchemy()
 DB_name = "database.db"
-
+import os
 
 
 def create_app():
@@ -13,7 +13,7 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:...@dpg-d33gn6ripnbc73e0abtg-a/db_kscb")
 
     db.init_app(app)
-    import os
+  
     import cloudinary
     import cloudinary.uploader
 
