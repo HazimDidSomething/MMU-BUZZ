@@ -18,9 +18,9 @@ def create_app():
     import cloudinary.uploader
 
     cloudinary.config( 
-    cloud_name = os.getenv("degsaqcd3"), 
-    api_key = os.getenv("493434864335775"), 
-    api_secret = os.getenv("1raBkmg7lhVHr7fJxzutLLMPrz4")
+        cloud_name = os.getenv("degsaqcd3"), 
+        api_key = os.getenv("493434864335775"), 
+        api_secret = os.getenv("1raBkmg7lhVHr7fJxzutLLMPrz4")
     )
     from .models import User, test, CommunityMember
     with app.app_context():
