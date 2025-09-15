@@ -10,7 +10,7 @@ import os
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = '[|_MMU_)(!BUZZ#)-=1?[|]'
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:...@dpg-d33gn6ripnbc73e0abtg-a/db_kscb")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:7ImyweYIfxkgFalUtfyvESGnanwafCzG@dpg-d33gn6ripnbc73e0abtg-a.oregon-postgres.render.com/db_kscb")
 
     db.init_app(app)
   
