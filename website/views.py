@@ -12,8 +12,6 @@ views = Blueprint('views', __name__)
 def home():
     posts = Posts.query.order_by(Posts.date.desc()).all()
     communities = test.query.all()
-    for post in posts:
-        post.images = [{'url': img.url} for img in post.images] 
     if current_user.reset_time != date.today():
         current_user.votes_remaining = 10
         current_user.reset_time = date.today()
