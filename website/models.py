@@ -30,6 +30,7 @@ class PostComment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
     content = db.Column(db.String(10000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
+    Firstname = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
     user = db.relationship("User", backref="comments")
    
