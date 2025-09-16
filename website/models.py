@@ -19,7 +19,7 @@ class Posts(db.Model):
 class PostsImg(db.Model):
     __tablename__ = "Posts_img"
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
     name = db.Column(db.Text, nullable= False)
     mimetype = db.Column(db.Text,nullable= False)
 
@@ -38,6 +38,7 @@ class User(db.Model, UserMixin):
     Role = db.Column(db.String(50), default="user")
     votes_remaining = db.Column(db.Integer, default=10)
     reset_time = db.Column(db.Date,default=lambda: date.today())
+    posts = db.relationship("Posts", backref="author", cascade="all, delete-orphan")
 
 
 # table for communities

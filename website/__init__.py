@@ -72,7 +72,7 @@ def Createmoderator():
                 new_mod = User(
                 email="mod@mmu.edu.my",
                 FirstName="mod123",
-                password=generate_password_hash("HAZIM171544",method ='pbkdf2:sha256'),
+                password=generate_password_hash("1234567",method ='pbkdf2:sha256'),
                 Role="moderator"   
                 )
 
