@@ -126,7 +126,6 @@ def comment(post_id):
             post_id = post_id,
             content = comment,
             user_id = current_user.id,
-            FirstName = current_user.FirstName
         )
         db.session.add(new_comment)
         db.session.commit()
