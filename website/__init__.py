@@ -25,7 +25,7 @@ def create_app():
     from .models import User, test, CommunityMember
     with app.app_context():
         if os.getenv("RESET_DB", "false").lower() == "true":
-            db.drop_all()
+            db.drop_all(bind=None, tables=None)
             db.session.commit()
             db.create_all()
             Createmoderator()
