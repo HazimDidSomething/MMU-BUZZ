@@ -20,10 +20,10 @@
   {% for post in posts %}
   <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
     <div class="card">
-    <div class="card-body">
-      <h5 class="mb-0">{{post.title}}</h5>
+    <div class="p-3 border rounded bg-light shadow-sm">
+      <h5 class="mb-0 ">{{post.title}}</h5>
       <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
-      <h6 class="card-text">{{post.content}}</h6>
+      <h6 class="card-text ">{{post.content}}</h6>
       {% if post.images %}
         <img src="{{ post.images[0].name }}" alt="Post image" width="300">
       {% endif %}

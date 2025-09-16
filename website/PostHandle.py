@@ -1,4 +1,4 @@
-from .models import Posts,PostsImg
+from .models import Posts,PostsImg,PostComment
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
 from flask_login import current_user,login_required,logout_user
@@ -56,10 +56,11 @@ def CreatePost():
 
 @PostHandle.route("/post/<int:post_id>")
 @login_required
-def ViewPost(post_id):
+def ViewPost(post_id):  
     post =Posts.query.get_or_404(post_id)
     img = PostsImg.query.filter_by(post_id=post_id).first()
-    return render_template("viewpost.html",post=post,user = current_user,img=img)
+    comments = PostComment.query.filter_by(post_id=post_id).all()
+    return render_template("viewpost.html",post=post,user = current_user,img=img,comments = comments)
 
 @PostHandle.route("/post/upvote/<int:post_id>")
 @login_required
@@ -116,5 +117,17 @@ def delete(post_id):
         logout_user()
         flash("what are u doing ? XD ", category='error')
         return redirect(url_for('auth.login'))
-
+@PostHandle.route("/post/comment/<int:post_id>", methods = ['POST'])
+@login_required
+def comment(post_id):
+    if request.method == 'POST':
+        comment = request.form.get("comment")
+        new_comment = PostComment(
+            post_id = post_id,
+            content = comment,
+            user_id = current_user.id
+        )
+        db.session.add(new_comment)
+        db.session.commit()
+        return redirect(url_for("post.ViewPost", post_id=post_id))
 
