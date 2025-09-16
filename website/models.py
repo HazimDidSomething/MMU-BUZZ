@@ -24,11 +24,14 @@ class PostsImg(db.Model):
     name = db.Column(db.Text, nullable= False)
     mimetype = db.Column(db.Text,nullable= False)
 
-class PostLike(db.Model):
-    __tablename__ ="PostLike"
-    id = db.Column(db.Integer,  primary_key=True)
+class PostComment(db.Model):
+    __tablename__ = "Posts_comment"
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
+    content = db.Column(db.String(10000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
+    date = db.Column(db.DateTime(timezone=False), default=func.now())
+
    
 
 class User(db.Model, UserMixin):
