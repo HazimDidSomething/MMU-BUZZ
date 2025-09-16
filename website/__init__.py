@@ -29,7 +29,8 @@ def create_app():
             db.create_all()
             Createmoderator()
         else:
-            db.create_all()
+            from flask_migrate import upgrade
+            upgrade()
             Createmoderator()
 
 
