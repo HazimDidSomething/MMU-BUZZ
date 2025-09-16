@@ -36,7 +36,7 @@
                     data-bs-toggle="collapse" 
                     data-bs-target="#commentBox" 
                     aria-expanded="false" 
-                    aria-controls="commentBox"> coment
+                    aria-controls="commentBox"> comment
                 </button>
 
             </div>
@@ -54,7 +54,7 @@
     <div class="collapse mt-3" id="commentBox">
         <div class="p-3 border rounded bg-light shadow-sm">
             <form method="POST" action="{{ url_for('post.comment', post_id=post.id) }}">
-                <textarea class="form-control mb-2" id="comment" name="coment" rows="3" placeholder="Write your comment..."></textarea>
+                <textarea class="form-control mb-2" id="comment" name="comment" rows="3" placeholder="Write your comment..."></textarea>
                 <button type="submit" class="btn btn-dark">Submit</button>
             </form>
         </div>
