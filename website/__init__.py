@@ -2,6 +2,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
+from sqlalchemy import text
 db = SQLAlchemy()
 DB_name = "database.db"
 import os
@@ -25,7 +26,8 @@ def create_app():
     from .models import User, test, CommunityMember
     with app.app_context():
         if os.getenv("RESET_DB", "false").lower() == "true":
-            db.drop_all(bind=None, tables=None)
+            db.session.execute(text("DROP SCHEMA public CASCADE"))
+            db.session.execute(text("CREATE SCHEMA public"))
             db.session.commit()
             db.create_all()
             Createmoderator()
