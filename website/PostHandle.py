@@ -37,10 +37,12 @@ def CreatePost():
             #print("herer")
 
             upload_result = cloudinary.uploader.upload(PIC)
+            public_id = upload_result.get("public_id")
             img_url = upload_result["secure_url"]
             img_add = PostsImg(
                 post_id = new_post.id,
-                name=img_url,          
+                name=img_url, 
+                public_id=public_id,         
                 mimetype=PIC.mimetype )
             db.session.add(img_add)
             db.session.commit()
