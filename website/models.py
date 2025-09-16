@@ -20,6 +20,7 @@ class PostsImg(db.Model):
     __tablename__ = "Posts_img"
     id = db.Column(db.Integer, primary_key=True)
     post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
+    public_id = db.Column(db.String(255), nullable=False)
     name = db.Column(db.Text, nullable= False)
     mimetype = db.Column(db.Text,nullable= False)
 

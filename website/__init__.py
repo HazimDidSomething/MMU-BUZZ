@@ -25,9 +25,7 @@ def create_app():
     from .models import User, test, CommunityMember
     with app.app_context():
         if os.getenv("RESET_DB", "false").lower() == "true":
-            with db.engine.connect() as conn:
-                conn.execute(db.text('DROP SCHEMA public CASCADE'))
-                conn.execute(db.text('CREATE SCHEMA public'))
+            db.drop_all()
             db.create_all()
             Createmoderator()
         else:

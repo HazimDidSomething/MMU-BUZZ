@@ -103,7 +103,7 @@ def delete(post_id):
 
     if current_user.Role ==  "moderator":
         post = Posts.query.get_or_404(post_id)
-        for img in post.imges:
+        for img in post.images:
             cloudinary.uploader.destroy(img.public_id)
             db.session.delete(img)
             
