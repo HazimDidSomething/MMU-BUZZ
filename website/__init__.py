@@ -26,11 +26,11 @@ def create_app():
     with app.app_context():
         if os.getenv("RESET_DB", "false").lower() == "true":
             db.drop_all()
+            db.session.commit()
             db.create_all()
             Createmoderator()
         else:
-            from flask_migrate import upgrade
-            upgrade()
+            db.create_all()
             Createmoderator()
 
 
