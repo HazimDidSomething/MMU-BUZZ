@@ -1,6 +1,7 @@
 from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
+from datetime import date
 
 class Posts(db.Model):
     __tablename__ = "Posts"
@@ -8,6 +9,8 @@ class Posts(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
@@ -16,12 +19,21 @@ class Posts(db.Model):
 class PostsImg(db.Model):
     __tablename__ = "Posts_img"
     id = db.Column(db.Integer, primary_key=True)
-    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id'))
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
+    public_id = db.Column(db.String(255), nullable=False)
     name = db.Column(db.Text, nullable= False)
     mimetype = db.Column(db.Text,nullable= False)
 
-
-
+class PostComment(db.Model):
+    __tablename__ = "Posts_comment"
+    id = db.Column(db.Integer, primary_key=True)
+    post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
+    content = db.Column(db.String(10000))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
+    Firstname = db.Column(db.String(10000))
+    date = db.Column(db.DateTime(timezone=False), default=func.now())
+    user = db.relationship("User", backref="comments")
+   
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -29,9 +41,10 @@ class User(db.Model, UserMixin):
     password = db.Column(db.String(150))
     FirstName = db.Column(db.String(150))
     Role = db.Column(db.String(50), default="user")
-    '''
-    posts = db.relationship('Post')
-    '''
+    votes_remaining = db.Column(db.Integer, default=10)
+    reset_time = db.Column(db.Date,default=lambda: date.today())
+    posts = db.relationship("Posts", backref="author", cascade="all, delete-orphan")
+
 
 # table for communities
 class test(db.Model):
