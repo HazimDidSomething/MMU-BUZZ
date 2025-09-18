@@ -1,7 +1,10 @@
+
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .models import test
-from .models import Posts,PostsImg
+from .models import Posts,PostsImg,test
+from datetime import date
+from . import db
 from datetime import date
 from . import db
 
@@ -20,3 +23,9 @@ def home():
 @views.route("/ping")
 def ping():
     return "pong", 200
+
+@views.route("/community")
+@login_required
+def community_page():
+    communities = test.query.all()
+    return render_template("community.html", user=current_user, communities=communities)

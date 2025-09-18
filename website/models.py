@@ -2,6 +2,7 @@ from . import db
 from flask_login import UserMixin
 from sqlalchemy.sql import func
 from datetime import date
+from datetime import date
 
 class Posts(db.Model):
     __tablename__ = "Posts"
@@ -9,6 +10,8 @@ class Posts(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
@@ -30,9 +33,10 @@ class PostComment(db.Model):
     post_id = db.Column(db.Integer, db.ForeignKey('Posts.id',ondelete="CASCADE"))
     content = db.Column(db.String(10000))
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
+    Firstname = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
     user = db.relationship("User", backref="comments")
-   
+    
 
 class User(db.Model, UserMixin):
     id = db.Column(db.Integer, primary_key=True)
@@ -65,6 +69,3 @@ class CommunityMember(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
- 
