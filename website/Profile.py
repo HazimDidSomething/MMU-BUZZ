@@ -6,7 +6,7 @@ from werkzeug.security import check_password_hash
 from . import db
 from .models import Posts
 
-Profile = Blueprint('profile',__name__)
+Profile = Blueprint('Profile',__name__)
 
 @Profile.route('/Profile')
 @login_required
@@ -31,3 +31,10 @@ def del_acc():
             flash("Your account has been deleted.", category="success")
             return redirect(url_for("auth.login"))
     return render_template("delete_account.html", user=current_user)
+
+@Profile.route("/profile/<int:user_id>")
+@login_required
+def show_user_profile(user_id):
+    user = User.query.get(user_id)
+    posts = Posts.query.filter_by(user_id = user_id).all()
+    return render_template("user_profile.html", user=user, posts=posts)
