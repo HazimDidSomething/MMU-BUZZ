@@ -11,11 +11,7 @@ def view_community(community_id):
     community = test.query.get_or_404(community_id)
     posts = Posts.query.filter_by(community_id=community.id).all()
     members = CommunityMember.query.filter_by(community_id=community.id).all()
-    return render_template("view_community.html", 
-                           community=community, 
-                           posts=posts, 
-                           members=members, 
-                           user=current_user)
+    return render_template("view_community.html", community=community, posts=posts, members=members, user=current_user)
 @community.route("/create_community", methods=["GET", "POST"])
 def create_community():
     if request.method == "POST":

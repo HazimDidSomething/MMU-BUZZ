@@ -1,4 +1,4 @@
-from .models import Posts,PostsImg,PostComment
+from .models import Posts,PostsImg,PostComment,test
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
 from flask_login import current_user,login_required,logout_user
@@ -11,22 +11,25 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 PostHandle = Blueprint('post',__name__)
 
 @PostHandle.route('/Create_Post', methods=['GET','POST'])
+@PostHandle.route('/Create_Post/<int:community_id>', methods=['GET','POST'])
 @login_required
-def CreatePost():
+def CreatePost(community_id=None):
+    communities = test.query.all()
+    
     if request.method == "POST":
+        if not community_id:
+            community_id = request.form.get("community_id")
+        community = test.query.get_or_404(community_id)
         title = request.form.get("title")
         content = request.form.get("content")
-        PIC = request.files.get("PIC")
-        '''
-        quick fix
-        group_id = request.form.get("group_id")
-        '''
         
+            
+        PIC = request.files.get("PIC")
         new_post = Posts(
             title = title,
             content = content,
             user_id = current_user.id,
-           # group_id = group_id,
+            community_id = community_id,
             FirstName = current_user.FirstName,
             vote = 0
         )
@@ -51,8 +54,8 @@ def CreatePost():
         
         flash("Post created!", "success")
         return redirect(url_for("views.home"))
-    
-    return render_template("CreatePost.html", user = current_user)
+    community = test.query.get_or_404(community_id) if community_id else None
+    return render_template("CreatePost.html", user = current_user,communities=communities,community=community )
 
 @PostHandle.route("/post/<int:post_id>")
 @login_required
