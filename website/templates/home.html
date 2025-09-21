@@ -4,14 +4,18 @@
 {% block content %}
 
   <h2>Available Community:</h2>
-  <ul>
-    {% for community in communities %}
-      <li><strong>{{ community.name }}</strong> - {{ community.description }}</li>
-    {% else %}
-      <li>No community available.</li>
-    {% endfor %}
-  </ul>
-
+<ul>
+  {% for community in communities %}
+    <li>
+      <a href="{{ url_for('community.view_community', community_id=community.id) }}"
+   class="btn btn-dark">
+   {{ community.name }}
+  </a> - {{ community.description }}
+    </li>
+  {% else %}
+    <li>No community available.</li>
+  {% endfor %}
+</ul>
 
 
 
@@ -44,9 +48,3 @@
 
 
 {% endblock %}
-
-
-
-
-
-

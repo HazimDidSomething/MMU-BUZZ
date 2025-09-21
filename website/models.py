@@ -14,6 +14,7 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
+    community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=True)
     images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
 
 class PostsImg(db.Model):
@@ -66,6 +67,3 @@ class CommunityMember(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
-
-
- 
