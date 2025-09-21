@@ -5,8 +5,6 @@ from .models import test
 from .models import Posts,PostsImg,test
 from datetime import date
 from . import db
-from datetime import date
-from . import db
 
 views = Blueprint('views', __name__)
 
