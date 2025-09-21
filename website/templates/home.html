@@ -22,7 +22,7 @@
     <div class="card">
     <div class="p-3 border rounded bg-light shadow-sm">
       <h5 class="mb-0 ">{{post.title}}</h5>
-      <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
+      <p class="card-text"><small class="text-body-secondary">By <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}">{{post.FirstName}}</a> ,At {{post.date}}</small></p>
       <h6 class="card-text ">{{post.content}}</h6>
       {% if post.images %}
         <img src="{{ post.images[0].name }}" alt="Post image" width="300">

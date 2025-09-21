@@ -4,7 +4,7 @@
 {% block content %}
 
     <h2 class="mb-0">{{post.title}}</h2>
-    <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}}, At {{post.date.strftime("%Y-%m-%d")}}</small></p>
+    <p class="card-text"><small class="text-body-secondary">By <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}">{{post.FirstName}}</a>, At {{post.date.strftime("%Y-%m-%d")}}</small></p>
     <div class="p-3 border rounded bg-light shadow-sm">
         <div class="p-3 border rounded bg-light shadow-sm">
             <h3 class="card-text text-wrap">{{post.content}}</h3>
@@ -64,19 +64,20 @@
         <h2 class="mb-1">Comments</h2>
         {% for comment in comments%}
             <div class = "mb-1 p-3 border rounded bg-light shadow-sm">
-                <p class="card-text"><small class="text-body-secondary">By {{comment.user.FirstName}}, At {{comment.date.strftime("%Y-%m-%d")}}</small></p>
+                <p class="card-text"><small class="text-body-secondary">By <a href="{{ url_for('Profile.show_user_profile', user_id=comment.user.id) }}">{{comment.user.FirstName}}</a>, At {{comment.date.strftime("%Y-%m-%d %H:%M:%S")}}</small></p>
                 <h6 class="card-text ">{{comment.content}}</h6>
+            
+            {% if current_user.Role == "moderator" %}
+            <a href="{{ url_for('post.delete_comment', comment_id=comment.id) }}" >
+                <button type="submit" class="btn btn-outline-danger"
+                        onclick="return confirm('Are you sure you want to delete this comment ? This cannot be undone.')">
+                        DELETE COMMENT!
+                </button>
+            </a>
+            {%endif %}
             </div>
         {%endfor%}
-
-
-
-
-
     </div>
-
-
-    
 {% endblock %}
 
 

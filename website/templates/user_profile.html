@@ -1,0 +1,32 @@
+{% extends "base.html" %} 
+{% block title %} Profile   {% endblock %}
+
+{% block content %} 
+    <h1>{{ user.FirstName }}'s Profile</h1>
+    <div class="pt-3"></div>
+    <h3><b>ID:</b> {{ user.id }}</h3>
+    <h3><b>Email:</b> {{ user.email }}</h3>
+    <h3><b>Role:</b> {{ user.Role }}</h3>
+    <div class="pt-5"></div>
+
+    <h1 class = "mb-4">{{ user.FirstName }}'s Posts</h1>
+    <div class="overflow-auto" style="max-height: 50vh;">
+        {% for post in posts %}
+        <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
+          <div class="card">
+          <div class="p-3 border rounded bg-light shadow-sm">
+            <h5 class="mb-0 ">{{post.title}}</h5>
+            <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
+            <h6 class="card-text ">{{post.content}}</h6>
+            {% if post.images %}
+              <img src="{{ post.images[0].name }}" alt="Post image" width="300">
+            {% endif %}
+          </div>
+          </div>
+          <div class = "pt-4"></div>
+        </a>
+        {% else %}
+               <h5>No posts yet.....     </h5>
+        {% endfor %}
+    </div>
+{% endblock %}

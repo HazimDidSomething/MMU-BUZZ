@@ -131,3 +131,16 @@ def comment(post_id):
         db.session.commit()
         return redirect(url_for("post.ViewPost", post_id=post_id))
 
+@PostHandle.route("/post/delete/comment/<int:comment_id>")
+@login_required
+def delete_comment(comment_id):
+    if current_user.Role == "moderator":
+        comment = PostComment.query.get_or_404(comment_id)
+        db.session.delete(comment)
+        db.session.commit()
+        return redirect(url_for("post.ViewPost", post_id=comment.post_id))
+    else:
+        logout_user()
+        flash("what are u doing ? XD ", category='error')
+        return redirect(url_for('auth.login'))
+
