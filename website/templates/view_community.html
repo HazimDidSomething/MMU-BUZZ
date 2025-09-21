@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %} {{ community.name }} {% endblock %}
+
+{% block content %}
+<h2>{{ community.name }}</h2>
+<p>{{ community.description }}</p>
+
+<a href="{{ url_for('community.create_post_in_community', community_id=community.id) }}" 
+   class="btn btn-success mb-3">
+   Create Post in {{ community.name }}
+</a>
+
+<h3>Posts</h3>
+<ul>
+  {% for post in posts %}
+    <li>
+      <a href="{{ url_for('post.ViewPost', post_id=post.id) }}">
+        <strong>{{ post.title }}</strong>
+      </a> by {{ post.FirstName }} at {{ post.date }}
+    </li>
+  {% else %}
+    <li>No posts yet. Be the first to post!</li>
+  {% endfor %}
+</ul>
+
+<a href="{{ url_for('views.home') }}" class="btn btn-secondary mt-3">Back to Home</a>
+{% endblock %}
