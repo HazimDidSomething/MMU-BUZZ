@@ -27,7 +27,7 @@ def create_app():
         api_key = os.getenv("CLOUDINARY_API_KEY"), 
         api_secret = os.getenv("CLOUDINARY_API_SECRET")
     )
-    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment
+    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment,_TEAST_
     
     with app.app_context():
         try:
