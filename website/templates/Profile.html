@@ -43,7 +43,7 @@
   </a>
   {% else %}
          <p>No posts yet. Be the first to           
-            <a href="/Create_Post" class="btn btn-outline-info">
+            <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
                     Create One !
                 </a></p>
   {% endfor %}
