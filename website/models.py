@@ -12,9 +12,11 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
-    # group_id  = db.Column(db.Integer,nullable=True)
     FirstName = db.Column(db.String(150))
+    community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=True)
+
     images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
+    community = db.relationship("test", backref="posts", lazy=True)
 
 class PostsImg(db.Model):
     __tablename__ = "Posts_img"
@@ -67,5 +69,6 @@ class CommunityMember(db.Model):
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
-
- 
+class _TEAST_(db.Model):
+    __tablename__ = "DB_CHECK_TEST"
+    id = db.Column(db.Integer, primary_key=True)

@@ -3,6 +3,12 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from sqlalchemy import text
+<<<<<<< HEAD
+=======
+from flask_migrate import Migrate , upgrade
+
+
+>>>>>>> 1c1ebbe0cac00abea4c2acc08cc56294610ccc84
 db = SQLAlchemy()
 DB_name = "database.db"
 import os
@@ -14,7 +20,12 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:7ImyweYIfxkgFalUtfyvESGnanwafCzG@dpg-d33gn6ripnbc73e0abtg-a.oregon-postgres.render.com/db_kscb")
 
     db.init_app(app)
+<<<<<<< HEAD
   
+=======
+    from . import models 
+    migrate = Migrate(app, db)
+>>>>>>> 1c1ebbe0cac00abea4c2acc08cc56294610ccc84
     import cloudinary
     import cloudinary.uploader
 
@@ -23,8 +34,16 @@ def create_app():
         api_key = os.getenv("CLOUDINARY_API_KEY"), 
         api_secret = os.getenv("CLOUDINARY_API_SECRET")
     )
-    from .models import User, test, CommunityMember
+    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment,_TEAST_
+    
     with app.app_context():
+        try:
+            upgrade()
+            print(" Database upgraded successfully!")
+        except Exception as e:
+            print(f"Could not upgrade database: {e}")
+        '''
+    TO NUKE THE DB
         if os.getenv("RESET_DB", "false").lower() == "true":
             db.session.execute(text("DROP SCHEMA public CASCADE"))
             db.session.execute(text("CREATE SCHEMA public"))
@@ -34,7 +53,7 @@ def create_app():
         else:
             db.create_all()
             Createmoderator()
-
+        '''
 
     from .views import views
     from .auth import auth

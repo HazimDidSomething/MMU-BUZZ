@@ -2,7 +2,7 @@
 {% block title %} Profile  {% endblock %}
 
 {% block content %} 
-    <h1>{{ current_user.FirstName }}'s Profile:</h1>
+    <h1>{{ current_user.FirstName }}'s Profile</h1>
     <div class="pt-3"></div>
     <h3><b>ID:</b> {{ current_user.id }}</h3>
     <h3><b>Email:</b> {{ current_user.email }}</h3>
@@ -16,7 +16,7 @@
         </button>
     </a>
 
-    <a href="{{ url_for('profile.del_acc') }}" >
+    <a href="{{ url_for('Profile.del_acc') }}" >
         <button type="submit" class="btn btn-outline-danger btn-sm"
                 onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
             ACCOUNT DELETION
@@ -28,24 +28,24 @@
     <h1 class = "mb-4">Your Posts</h1>
     <div class="overflow-auto" style="max-height: 50vh;">
     {% for post in posts %}
-    <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-        <div class="card">
-        <div class="card-body">
-        <h5 class="mb-0">{{post.title}}</h5>
-        <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
-        <h6 class="card-text">{{post.content}}</h6>
-        {% if post.images %}
-          <img src="{{ url_for('static', filename='uploads/' ~ post.images[0].name) }}" alt="Post image" width="300">
-        {% endif %}
-        </div>
-        </div>
-        <div class = "pt-4"></div>
-    </a>
-    {% else %}
-        <p>No posts yet. make your first one right now!!           
-            <a href="/Create_Post" class="btn btn-outline-info">
-                    POST
+  <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
+    <div class="card">
+    <div class="p-3 border rounded bg-light shadow-sm">
+      <h5 class="mb-0 ">{{post.title}}</h5>
+      <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
+      <h6 class="card-text ">{{post.content}}</h6>
+      {% if post.images %}
+        <img src="{{ post.images[0].name }}" alt="Post image" width="300">
+      {% endif %}
+    </div>
+    </div>
+    <div class = "pt-4"></div>
+  </a>
+  {% else %}
+         <p>No posts yet. Be the first to           
+            <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
+                    Create One !
                 </a></p>
-    {% endfor %}
+  {% endfor %}
     </div>
 {% endblock %}
