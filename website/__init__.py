@@ -13,7 +13,7 @@ import os
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = '[|_MMU_)(!BUZZ#)-=1?[|]'
+    app.config['SECRET_KEY'] = "[|_MMU_)(!BUZZ#)-=1?[|]"
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:7ImyweYIfxkgFalUtfyvESGnanwafCzG@dpg-d33gn6ripnbc73e0abtg-a.oregon-postgres.render.com/db_kscb")
 
     db.init_app(app)
@@ -27,7 +27,7 @@ def create_app():
         api_key = os.getenv("CLOUDINARY_API_KEY"), 
         api_secret = os.getenv("CLOUDINARY_API_SECRET")
     )
-    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment,_TEAST_
+    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment
     
     with app.app_context():
         try:
@@ -54,7 +54,9 @@ def create_app():
     from .Profile import Profile
     from .PostHandle import PostHandle
     from .community import community
+    from .sign_up_otp import sign_up_otp
 
+    app.register_blueprint(sign_up_otp, url_prefix='/')
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')

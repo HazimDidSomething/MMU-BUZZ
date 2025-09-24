@@ -70,6 +70,3 @@ class CommunityMember(db.Model):
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
-class _TEAST_(db.Model):
-    __tablename__ = "DB_CHECK_TEST"
-    id = db.Column(db.Integer, primary_key=True)

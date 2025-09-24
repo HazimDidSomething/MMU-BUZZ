@@ -2,29 +2,18 @@
 {% block title %} Home {% endblock %}
 
 {% block content %}
+<div class="overflow-auto scroll-hidden " style="max-height: 100vh;">
 
-  <h2>Available Community:</h2>
-<ul>
-  {% for community in communities %}
-    <li>
-      <a href="{{ url_for('community.view_community', community_id=community.id) }}"
-   class="btn btn-dark">
-   {{ community.name }}
-  </a> - {{ community.description }}
-    </li>
-  {% else %}
-    <li>No community available.</li>
-  {% endfor %}
-</ul>
+
 
 
 
   <h1 class = "mb-4">Latest Post</h1>
-  <div class="overflow-auto" style="max-height: 70vh;">
+  <div >
   {% for post in posts %}
-    <div class="card mb-4">
+    <div class="cm-card">
       <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-        <div class="p-3 border rounded bg-light shadow-sm">
+        <div class="p-3 cm-card ">
           <h5 class="mb-0">{{ post.title }}</h5>
           <p class="card-text">
             <small class="text-body-secondary">
@@ -39,6 +28,7 @@
       </a>
     </div>
     </a>
+    <div class="pt-4"></div>
   {% else %}
         <p>No posts yet. Be the first to           
             <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
@@ -50,11 +40,23 @@
 
 
 
-
+</div>
 {% endblock %}
 
+{% block sidenav %}
+<h2>JOIN NOW !!</h2>
 
+  {% for community in communities %}
+    <a href="{{ url_for('community.view_community', community_id=community.id) }}"
+    class="btn btn-success ">
+    {{ community.name }}
+  </a> - {{ community.description }}
+    
+    <div class="pt-4"></div>
+  {% else %}
+    <p>community available.</p>
+  {% endfor %}
 
-
+{% endblock %}
 
 
