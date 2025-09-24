@@ -2,16 +2,17 @@
 {% block title %} Profile  {% endblock %}
 
 {% block content %} 
-    <h1>{{ current_user.FirstName }}'s Profile</h1>
+    <h1 align="center">Your Profile</h1>
     <div class="pt-3"></div>
     <h3><b>ID:</b> {{ current_user.id }}</h3>
+    <h3><b>Name:</b> {{ current_user.FirstName }}</h3>
     <h3><b>Email:</b> {{ current_user.email }}</h3>
     <h3><b>Role:</b> {{ current_user.Role }}</h3>
     <h3><b>Vote's Left:</b> {{current_user.votes_remaining}}</h3>
     <div class="pt-5"></div>
 
     <a href="/logout">
-        <button type="submit" class="btn btn-outline-secondary btn-sm">
+        <button type="submit" class="btn btn-outline-light btn-sm">
             Logout
         </button>
     </a>
@@ -48,4 +49,15 @@
                 </a></p>
   {% endfor %}
     </div>
+{% endblock %}
+{% block sidenav %}
+<H3>Send feedback or any issues here!: </H3>
+<a href="{{ url_for('modPage.submit_feedback') }}" class="btn btn-outline-info">
+    Feedback/Issues</a>
+
+{% endblock %}
+
+{% block bottom %}
+<a href="{{ url_for('modPage.submit_feedback') }}" class="btn btn-outline-info">
+    Feedback/Issues</a>
 {% endblock %}

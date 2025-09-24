@@ -52,14 +52,14 @@ def create_app():
 
     from .views import views
     from .auth import auth
-    from .DBinfo import DBinfo
+    from .modPage import modPage
     from .Profile import Profile
     from .PostHandle import PostHandle
     from .community import community
     from .signUP import signUP
 
     app.register_blueprint(signUP, url_prefix='/')
-    app.register_blueprint(DBinfo, url_prefix='/')
+    app.register_blueprint(modPage, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')
     app.register_blueprint(Profile,url_prefix='/')

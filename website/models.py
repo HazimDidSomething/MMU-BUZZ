@@ -71,3 +71,12 @@ class CommunityMember(db.Model):
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
+class feedback(db.Model):
+    __tablename__ = "feedback"
+
+    id = db.Column(db.Integer, primary_key=True)
+    content = db.Column(db.String(10000))
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
+    Firstname = db.Column(db.String(10000))
+    date = db.Column(db.DateTime(timezone=False), default=func.now())
+    user = db.relationship("User", backref="feedbacks")  

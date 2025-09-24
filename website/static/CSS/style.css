@@ -39,3 +39,13 @@ html, body {
     margin: 0;          
     overflow: hidden;   
 }
+.overflow-auto {
+    box-sizing: border-box;
+}
+
+.overflow-auto > :last-child {
+    margin-bottom: 0;
+}
+.overflow-auto {
+    overflow-y: auto;  
+}

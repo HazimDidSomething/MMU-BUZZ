@@ -1,0 +1,21 @@
+{% extends "base.html" %} 
+{% block title %} Create Post {% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <h3 align="center">Submit feedback or issues </h3>
+    <label for="Content">feedback or issues </label>
+    <textarea  
+        class="form-control"
+        id="feedback"
+        name="feedback"
+        rows="4"
+        placeholder="Enter your feedback or issues here..."
+        required
+    ></textarea>
+    <div class = "pt-4" ></div>
+    <button type="submit" class="btn btn-outline-success btn-lg">Submit</button>
+</form>
+{% endblock %}
+
+
