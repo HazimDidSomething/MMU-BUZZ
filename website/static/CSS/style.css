@@ -1,0 +1,41 @@
+
+body {
+    background-color: #3C3744;
+    color: #ffffff;
+}
+
+.cm-text {
+    color: #ffffff;
+}
+
+.cm-card {
+    background-color: #FBFFF1;
+    color: #000000;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: .5rem;
+    box-shadow: 0 .125rem .25rem rgba(0,0,0,.075);
+}
+.cm-nav {
+  background-color: #302b36;
+  padding-left: 1rem;   /* space between items and left edge */
+  padding-right: 2rem;  /* space between items and right edge */
+}
+.cm-nav .nav-link {
+  padding-left: 0.5rem;
+  padding-right: 0.5rem;
+}
+.scroll-hidden {
+    overflow-y: auto;          
+    scrollbar-width: none;     
+    -ms-overflow-style: none;  
+}
+
+.scroll-hidden::-webkit-scrollbar {
+    display: none;             
+}
+html, body {
+    height: 100%;       
+    margin: 0;          
+    overflow: hidden;   
+}
