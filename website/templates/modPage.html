@@ -1,0 +1,82 @@
+{% extends "base.html" %} 
+{% block title %} Mod page  {% endblock %}
+
+
+
+{% block content %} 
+<div class="overflow-auto scroll-hidden " style="height: 100vh;">
+
+
+    <h1  align="center"> Mod page</h1>
+
+
+
+<div class="container mt-4">
+    <div class="row">
+        <!-- Left Column: Users, Communities, Posts -->
+        <div class="col-md-6">
+            <h3>Users:</h3>
+            <p>Total users: {{ user_num }}</p>
+            <ul>
+                {% for user in users %}
+                    <li>{{ user.id }} - <a href="{{ url_for('Profile.show_user_profile', user_id=user.id) }}" class="fw-bold">{{ user.FirstName }}</a> - {{ user.email }} - Role: {{ user.Role }}</li>
+                {% endfor %}
+            </ul>
+
+            <h3>Communities:</h3>
+            <p>Total communities: {{ community_num }}</p>
+            <ul>
+                {% for community in communities %}
+                    <li>Community name: {{ community.name }} , ID: {{ community.id }}</li>
+                    <p>Description: {{ community.description }}</p>
+                {% endfor %}
+            </ul>
+
+            <h3>Posts:</h3>
+            <p>Total posts: {{ posts_num }}</p>
+        </div>
+
+        
+        <div class="col-md-6">
+            <h3>Feedback:</h3>
+            {% for feedback in feedbacks %}
+                <div class="cm-card">
+                    <div class="p-3 cm-card">
+                        <p class="card-text">
+                            <small class="text-body-secondary">
+                                By <a href="{{ url_for('Profile.show_user_profile', user_id=feedback.user_id) }}" class="fw-bold">{{ feedback.Firstname }}</a>, At {{ feedback.date.strftime("%Y-%m-%d %H:%M:%S") }}
+                            </small>
+                        </p>
+                        <h6 class="card-text">{{ feedback.content }}</h6>
+                        
+                        
+                        <form action="{{ url_for('modPage.delete_feedback', feedback_id=feedback.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-outline-danger">DELETE feedback!</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="pt-4"></div>
+            {%else%}
+                <p>No feedback available.</p>
+            {% endfor %}
+            
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+{% block sidenav %}
+    <H1> MAKE MOD !!!</H1>
+        <form method="POST"  action="{{ url_for('modPage.make_moderator') }}">
+            <div class="mb-3">
+                <label for="user_id" class="form-label">User ID to promote to Moderator:</label>
+                <input type="number" class="form-control" id="user_id" name="user_id" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Promote to Moderator</button>
+        </form>
+{% endblock %}
+            

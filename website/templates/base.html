@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.css" crossorigin="anonymous" />
     <link rel="stylesheet" href="{{url_for('static', filename = 'CSS/style.css')}}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/mmubuzz2.png') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/mmubuzz.png') }}">
 
         
 
@@ -18,10 +18,10 @@
     <body class="d-flex flex-column min-vh-100">
          <nav class="navbar navbar-expand-lg navbar-dark cm-nav ">
                 {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="home" href="/"><img src="{{ url_for('static', filename='uploads/mmubuzz2.png') }}" alt="MMUBUZZ"  width="80" height="50" class="d-inline-block align-text-top me-2"></a>
+                <a class="nav-item nav-link" id="home" href="/"><img src="{{ url_for('static', filename='uploads/mmubuzz.png') }}" alt="MMUBUZZ"  width="80" height="50" class="d-inline-block align-text-top me-2"></a>
 
                 {% else%}
-                <img src="{{ url_for('static', filename='uploads/mmubuzz2.png') }}" alt="MMUBUZZ"  width="80" height="50" class="d-inline-block align-text-top me-2">
+                <img src="{{ url_for('static', filename='uploads/mmubuzz.png') }}" alt="MMUBUZZ"  width="80" height="50" class="d-inline-block align-text-top me-2">
                 {% endif %}
 
 
@@ -34,7 +34,7 @@
                     <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign up</a>
                     {% endif %}
                     {% if current_user.Role == "moderator" %}
-                    <a class="nav-item nav-link" id="home" href="/DB_INFO">DB</a>
+                    <a class="nav-item nav-link" id="home" href="/mod-page">MOD PAGE</a>
                     {% endif %}
                 </div>
             <!-- this will be shown on the right side on the nav bar -->
@@ -48,7 +48,7 @@
                     <i class="bi bi-plus-lg"></i>CREATE COMMUNITY!
                 </a>
                 <div class="px-2"></div>
-                <a class="nav-item nav-link" id="logout" href="/Profile">Profile</a>
+                <a href="/Profile" class="btn btn-outline-light">Profile</a>
                 {% endif %}
                 </div>
             </div>
@@ -62,7 +62,7 @@
             </ul>
             </nav>
         <!-- Main Content -->
-            <main class="flex-grow-1 p-4 scroll-hidden">        
+            <main class="flex-grow-1 p-4 overflow-auto scroll-hidden" style="max-height: 90vh; padding-bottom: 80px;">        
             {% with messages = get_flashed_messages(with_categories=true) %} 
                 {% if messages %} 
                     {% for category, message in messages %} 
@@ -98,18 +98,20 @@
             
             <nav class="navbar fixed-bottom d-flex d-lg-none justify-content-around p-2 cm-nav">
                 {% if user.is_authenticated %}
-                <a class="nav-item nav-link" id="home" href="/">Home</a>
                 <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light">
                     <i class="bi bi-plus-lg"></i>POST
                 </a>
                                 <a href="/create_community" class="btn btn-outline-light">
                     <i class="bi bi-plus-lg"></i>CREATE COMMUNITY!
                 </a>
-                <a class="nav-item nav-link" id="logout" href="/Profile">Profile</a>
+                <a href="/Profile" class="btn btn-outline-light">Profile</a>
                 {% else %}
-                <a class="nav-item nav-link" id="login" href="/login">Login</a>
-                <a class="nav-item nav-link" id="signUp" href="/sign-up">Sign up</a>
+                <a class="btn btn-outline-light" id="login" href="/login">Login</a>
+                <a class="btn btn-outline-light" id="signUp" href="/sign-up">Sign up</a>
                 {% endif %}
+                {% block bottom %}
+                {% endblock %}
+            </nav>
         </div>
 
 
