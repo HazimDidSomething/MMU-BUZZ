@@ -100,10 +100,6 @@
                 {% if user.is_authenticated %}
                 <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light">
                     <i class="bi bi-plus-lg"></i>POST
-                </a>
-                                <a href="/create_community" class="btn btn-outline-light">
-                    <i class="bi bi-plus-lg"></i>CREATE COMMUNITY!
-                </a>
                 <a href="/Profile" class="btn btn-outline-light">Profile</a>
                 {% else %}
                 <a class="btn btn-outline-light" id="login" href="/login">Login</a>
