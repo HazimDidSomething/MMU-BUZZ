@@ -1,31 +1,39 @@
 import smtplib
 from email.mime.text import MIMEText
-import os
-import dotenv   
-dotenv.load_dotenv()
-
-# Brevo (Sendinblue) SMTP settings
-SMTP_SERVER = os.getenv("MAIL_SERVER")
-SMTP_PORT = os.getenv("MAIL_PORT")
-SMTP_LOGIN = os.getenv("MAIL_USERNAME")  
-SMTP_PASSWORD = os.getenv("MAIL_PASSWORD")
-FROM_EMAIL = os.getenv("MAIL_FROM")
+from flask import render_template
+from flask_login import current_user
 
 
-def send_verification_email(to_email, otp):
-    subject = "Verify your MMU-Buzz account"
-    body = f"Your verification code is: {otp}"
+def send_otp_email(to_email, otp):
+    
+    SMTP_SERVER = 'smtp-relay.brevo.com'  #HIDE LATER
+    SMTP_PORT = 587
+    SMTP_USER = '97b6ea002@smtp-brevo.com' 
+    SMTP_PASS = 'D8Vd7G6JwZq5E3jk'           
 
+    from_email = 'hazimzubair81@gmail.com'
+    to_email = to_email
+    subject = 'MMU BUZZ OTP Email'
+    body = f"""Hello! WELCOME TO MMU BUZZ. Your OTP is: {otp}. Please do not share it with anyone.
+    Have a great day! If you did not request this, please ignore this email thank you."""
+
+
+    # Create the email
     msg = MIMEText(body)
-    msg["From"] = FROM_EMAIL
-    msg["To"] = to_email
-    msg["Subject"] = subject
+    msg['Subject'] = subject
+    msg['From'] = from_email
+    msg['To'] = to_email
 
+# Send email
     try:
-        with smtplib.SMTP(SMTP_SERVER, SMTP_PORT) as server:
-            server.starttls()
-            server.login(SMTP_LOGIN, SMTP_PASSWORD)
-            server.sendmail(FROM_EMAIL, [to_email], msg.as_string())
-        print(f"ent OTP email to {to_email}")
+        server = smtplib.SMTP(SMTP_SERVER, SMTP_PORT)
+        server.starttls()  # Enable TLS
+        server.login(SMTP_USER, SMTP_PASS)
+        server.sendmail(from_email, to_email, msg.as_string())
+        print("Email sent successfully!")
+        return render_template('verify_otp.html', user=current_user)
     except Exception as e:
-        print(f" Failed to send email: {e}")
+        return render_template('sign_up.html', user=current_user)
+        
+    finally:
+        return render_template('sign_up.html', user=current_user)
