@@ -4,6 +4,8 @@ from os import path
 from flask_login import LoginManager
 from sqlalchemy import text
 from flask_migrate import Migrate , upgrade
+from flask_mail import Mail, Message
+
 
 
 db = SQLAlchemy()
@@ -54,9 +56,9 @@ def create_app():
     from .Profile import Profile
     from .PostHandle import PostHandle
     from .community import community
-    from .sign_up_otp import sign_up_otp
+    from .signUP import signUP
 
-    app.register_blueprint(sign_up_otp, url_prefix='/')
+    app.register_blueprint(signUP, url_prefix='/')
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
     app.register_blueprint(auth, url_prefix='/')

@@ -2,20 +2,14 @@ from flask import Blueprint ,render_template,request,flash,redirect,url_for,sess
 import re
 from .models import User
 from werkzeug.security import generate_password_hash, check_password_hash
-from flask_login import login_user, login_required,logout_user,current_user
+from flask_login import current_user
 from . import db
-from .utils.mailer import send_verification_email as send_otp_email
+from .utils.mailer import send_otp_email
 import random
 
+signUP = Blueprint('signUP',__name__)
 
-sign_up_otp = Blueprint('sign_up_otp',__name__)
-
-
-
-
-
-
-@sign_up_otp.route('/sign-up',methods=['GET', 'POST'])
+@signUP.route('/sign-up',methods=['GET', 'POST'])
 def sign_up():
     if request.method == 'POST':
         email = request.form.get('MMU-email')
@@ -28,9 +22,11 @@ def sign_up():
             flash('USER ALREADY EXIST', category='error')
         elif len(email) < 4 :
             flash("Your email is too short." , category='error')
-
+        
         elif not re.match(r'^[\w\.-]+@(student\.)?mmu\.edu\.my$', email):
-            flash('Please use your MMU email (e.g. name@student.mmu.edu.my)', category='error')
+            flash('Please use your MMU email (e.g. name@student.mmu.edu.my or name@mmu.edu.my)', category='error')
+        
+
         elif len(FirstName) < 2:
             flash('UR NAME IS TOO SHORT.',category='error')
             
@@ -45,20 +41,20 @@ def sign_up():
             session['signup_info'] = {
                 'email': email,
                 'FirstName': FirstName,
-                'password': generate_password_hash(Passowrd1, method='pbkdf2:sha256')
+                'password': generate_password_hash(Passowrd1, method='pbkdf2:sha256'),
             }
             session['otp'] = otp
             send_otp_email(email, otp)
             flash('An OTP has been sent to your email. Please verify to complete registration.', category = 'success')
-            return redirect(url_for('sign_up_otp.verify_otp'))
+            return redirect(url_for('signUP.verify_otp'))
 
     return render_template("sign_up.html",user = current_user)
 
-@sign_up_otp.route('/verify-otp', methods=['GET', 'POST'])
+@signUP.route('/verify-otp', methods=['GET', 'POST'])
 def verify_otp():
     if request.method == 'POST':
         entered_otp = request.form.get('otp')
-        if entered_otp == session.get('otp'):
+        if entered_otp == session.get('otp') :
             flash('OTP verified successfully!', category='success')
             user_data = session.get('signup_info')
             if user_data:

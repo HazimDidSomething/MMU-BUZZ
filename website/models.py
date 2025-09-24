@@ -47,6 +47,7 @@ class User(db.Model, UserMixin):
     votes_remaining = db.Column(db.Integer, default=10)
     reset_time = db.Column(db.Date,default=lambda: date.today())
     posts = db.relationship("Posts", backref="author", cascade="all, delete-orphan")
+    otp = db.Column(db.String(6), nullable=True)
 
 
 # table for communities
