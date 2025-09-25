@@ -3,12 +3,9 @@ from flask_sqlalchemy import SQLAlchemy
 from os import path
 from flask_login import LoginManager
 from sqlalchemy import text
-<<<<<<< HEAD
-=======
 from flask_migrate import Migrate , upgrade
 
 
->>>>>>> 1c1ebbe0cac00abea4c2acc08cc56294610ccc84
 db = SQLAlchemy()
 DB_name = "database.db"
 import os
@@ -20,12 +17,8 @@ def create_app():
     app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:7ImyweYIfxkgFalUtfyvESGnanwafCzG@dpg-d33gn6ripnbc73e0abtg-a.oregon-postgres.render.com/db_kscb")
 
     db.init_app(app)
-<<<<<<< HEAD
-  
-=======
     from . import models 
     migrate = Migrate(app, db)
->>>>>>> 1c1ebbe0cac00abea4c2acc08cc56294610ccc84
     import cloudinary
     import cloudinary.uploader
 
@@ -34,7 +27,7 @@ def create_app():
         api_key = os.getenv("CLOUDINARY_API_KEY"), 
         api_secret = os.getenv("CLOUDINARY_API_SECRET")
     )
-    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment,_TEAST_
+    from .models import User, test, CommunityMember, Posts, PostsImg, PostComment
     
     with app.app_context():
         try:
@@ -54,13 +47,12 @@ def create_app():
             db.create_all()
             Createmoderator()
         '''
-
+    from .community import community
     from .views import views
     from .auth import auth
     from .DBinfo import DBinfo
     from .Profile import Profile
     from .PostHandle import PostHandle
-    from .community import community
 
     app.register_blueprint(DBinfo, url_prefix='/')
     app.register_blueprint(views, url_prefix='/')
