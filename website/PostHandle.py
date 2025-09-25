@@ -115,6 +115,7 @@ def delete(post_id):
             
         db.session.delete(post)
         db.session.commit()
+        flash("Post deleted.", "success")
         return redirect(url_for("views.home"))
     else:
         logout_user()
@@ -157,7 +158,7 @@ def report_post(post_id):
         if not reason:
             flash("Please provide a reason for reporting the post.", "error")
             return redirect(url_for("post.report_post", post_id=post_id))
-
+        reason = f"| id - {current_user.id}  name - {current_user.FirstName} email - {current_user.email} | reason: {reason}\n"
         post.status = "reported"
         post.reasons = reason
         db.session.commit()

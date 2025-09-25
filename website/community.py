@@ -101,12 +101,35 @@ def view_all_communities():
     communities = test.query.all()
     return render_template("ViewAllCommunity.html", user=current_user, communities=communities)
 
+
+
 @community.route("/community/<int:community_id>/post/approved/<int:post_id>", methods=["POST"])
 @login_required
-def approve_post(community_id, post_id):
-    post = Posts.query.filter_by(status="reported").filter_by(community_id=community_id).all()
-    if post.status == "approve":
-        post.status = "approved"
-        flash("Post approved successfully.", "success")
+def reject_report(community_id, post_id):
+    post = Posts.query.filter_by(id=post_id, community_id=community_id, status="reported").first_or_404()
+
+    post.status = "approved"
+    flash("Post report rejected successfully.", "success")
     db.session.commit()
-    return redirect(url_for("views.home"))
+    return redirect(url_for("community.view_reported_posts", community_id=community_id))
+
+
+
+@community.route("/community/<int:community_id>/post/reported", methods=["GET"])
+@login_required
+def view_reported_posts(community_id):
+    user_id = current_user.id
+    
+    # Check if user is an admin of this community
+    memeber = CommunityMember.query.filter_by(user_id=user_id, community_id=community_id).first()
+
+    if not (memeber and memeber.community_role == "admin") or current_user.Role != "moderator":
+        flash("You do not have permission to view reported posts.", "error")
+        return redirect(url_for("community.view_community", community_id=community_id))
+        
+    community = test.query.get_or_404(community_id)  
+    reports = Posts.query.filter_by(
+        status="reported", community_id=community.id
+    ).order_by(Posts.date.desc()).all()
+
+    return render_template("view_report.html",community=community,reports=reports,user=current_user,)
