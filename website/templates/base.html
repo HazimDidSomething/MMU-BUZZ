@@ -47,6 +47,7 @@
                 <a href="/create_community" class="btn btn-outline-light">
                     <i class="bi bi-plus-lg"></i>CREATE COMMUNITY!
                 </a>
+                 <a href="/AllCommunity" class="btn btn-outline-light">Community</a>
                 <div class="px-2"></div>
                 <a href="/Profile" class="btn btn-outline-light">Profile</a>
                 {% endif %}
@@ -96,22 +97,26 @@
             </ul>
             </nav>
             
-            <nav class="navbar fixed-bottom d-flex d-lg-none justify-content-around p-2 cm-nav">
-                {% if user.is_authenticated %}
-                <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light">
-                    <i class="bi bi-plus-lg"></i>POST
-                </a>
-                                <a href="/create_community" class="btn btn-outline-light">
-                    <i class="bi bi-plus-lg"></i>CREATE COMMUNITY!
-                </a>
-                <a href="/Profile" class="btn btn-outline-light">Profile</a>
-                {% else %}
-                <a class="btn btn-outline-light" id="login" href="/login">Login</a>
-                <a class="btn btn-outline-light" id="signUp" href="/sign-up">Sign up</a>
-                {% endif %}
-                {% block bottom %}
-                {% endblock %}
-            </nav>
+           <nav class="navbar fixed-bottom d-flex d-lg-none justify-content-around p-2 cm-nav">
+    <a href="{{ url_for('views.community_page') }}" class="btn btn-outline-light flex-fill mx-1">
+        <i class="bi bi-people"></i> Community
+    </a>
+
+    {% if user.is_authenticated %}
+        <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light flex-fill mx-1">
+            <i class="bi bi-plus-lg"></i> POST
+        </a>
+        <a href="/create_community" class="btn btn-outline-light flex-fill mx-1">
+            <i class="bi bi-plus-lg"></i> CREATE COMMUNITY!</a>
+            <a href="/all_community" class="btn btn-outline-light">Community</a>
+            <div class="px-2"></div>
+        <a href="/Profile" class="btn btn-outline-light flex-fill mx-1">Profile</a>
+    {% else %}
+        <a class="btn btn-outline-light flex-fill mx-1" href="/login">Login</a>
+        <a class="btn btn-outline-light flex-fill mx-1" href="/sign-up">Sign up</a>
+    {% endif %}
+</nav>
+
         </div>
 
 

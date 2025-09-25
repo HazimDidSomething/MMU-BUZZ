@@ -1,0 +1,55 @@
+{% extends "base.html" %} 
+{% block title %} Communities {% endblock %}
+
+{% block content %}
+<div>
+
+
+
+
+  <h1 class="mb-4">Popular Communities</h1>
+  <div class="row">
+    {% for community in communities %}
+      <div class="col-md-4 mb-3">
+        <div class="card p-3 shadow-sm h-100">
+          <h5 class="card-title">{{ community.name }}</h5>
+          <p class="card-text">{{ community.description or "No description yet." }}</p>
+          <a href="{{ url_for('community.view_community', community_id=community.id) }}" 
+             class="btn btn-primary">Visit</a>
+        </div>
+      </div>
+    {% else %}
+      <p>No communities available yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+
+  </div>
+
+
+
+
+</div>
+{% endblock %}
+
+{% block sidenav %}
+<h2>JOIN NOW !!</h2>
+
+  {% for community in communities %}
+    <a href="{{ url_for('community.view_community', community_id=community.id) }}"
+    class="btn btn-success ">
+    {{ community.name }}
+  </a> - {{ community.description }}
+    
+    <div class="pt-4"></div>
+  {% else %}
+    <p>community available.</p>
+  {% endfor %}
+
+{% endblock %}
+
+
+{% block bottom %}
+  {{ super() }}
+{% endblock %}

@@ -104,3 +104,9 @@ def approve_post(community_id, post_id):
         flash("Post approved successfully.", "success")
     db.session.commit()
     return redirect(url_for("views.home"))
+
+@community.route("/AllCommunity/")
+@login_required
+def view_all_communities():
+    communities = test.query.all()
+    return render_template("ViewAllCommunity.html", user=current_user, communities=communities)
