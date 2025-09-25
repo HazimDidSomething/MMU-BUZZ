@@ -1,0 +1,19 @@
+{% extends "base.html" %} 
+{% block title %} Report Post {% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <h3 align="center">Report Post</h3>
+    <label for="Content">Reason for Report</label>
+    <textarea  
+        class="form-control"
+        id="reason"
+        name="reason"
+        rows="4"
+        placeholder="Enter your reason for reporting here..."
+        required
+    ></textarea>
+    <div class = "pt-4" ></div>
+    <button type="submit" class="btn btn-outline-success btn-lg">Submit</button>
+</form>
+{% endblock %}

@@ -10,7 +10,7 @@ community = Blueprint("community", __name__)
 @login_required
 def view_community(community_id):
     community = test.query.get_or_404(community_id)
-    posts = Posts.query.filter_by(community_id=community.id).all()
+    posts = Posts.query.filter_by(community_id=community.id).filter_by(status="approved").order_by(Posts.date.desc()).all()
     members = CommunityMember.query.filter_by(community_id=community.id).all()
     is_admin = CommunityMember.query.filter_by(
         community_id=community.id,
@@ -92,4 +92,15 @@ def delete_community(community_id):
     db.session.commit()
 
     flash(f"Community '{community.name}' has been deleted!", "success")
+    return redirect(url_for("views.home"))
+
+
+@community.route("/community/<int:community_id>/post/approved/<int:post_id>", methods=["POST"])
+@login_required
+def approve_post(community_id, post_id):
+    post = Posts.query.filter_by(status="reported").filter_by(community_id=community_id).all()
+    if post.status == "approve":
+        post.status = "approved"
+        flash("Post approved successfully.", "success")
+    db.session.commit()
     return redirect(url_for("views.home"))

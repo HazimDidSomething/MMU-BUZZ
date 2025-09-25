@@ -1,0 +1,59 @@
+{% extends "base.html" %} 
+{% block title %} report_post  {% endblock %}
+
+
+
+{% block content %} 
+<div class="overflow-auto scroll-hidden " style="height: 100vh;">
+
+
+    <h1  align="center"> Report Post</h1>
+    
+
+
+
+
+        
+        <div class="col-md-6">
+            <h3>Report:</h3>
+            {% for report in reports %}
+                <div class="cm-card">
+                    <div class="p-3 cm-card">
+                        <p class="card-text">
+                            <small class="text-body-secondary">
+                                By <a href="{{ url_for('Profile.show_user_profile', user_id=report.user_id) }}" class="fw-bold">{{ report.Firstname }}</a>, At {{ report.date.strftime("%Y-%m-%d %H:%M:%S") }}
+                            </small>
+                        </p>
+                        <h6 class="card-text">{{ Post.reasons }}</h6>
+
+
+                        <form action="{{ url_for('community.approve_post', post_id=post.id) }}" method="POST" style="display:inline;">
+                            <button type="submit" class="btn btn-outline-danger">Approved</button>
+                        </form>
+                    </div>
+                </div>
+                <div class="pt-4"></div>
+            {%else%}
+                <p>No reports available.</p>
+            {% endfor %}
+            
+        </div>
+        
+    </div>
+</div>
+
+
+
+
+{% endblock %}
+{% block sidenav %}
+    <H1> MAKE MOD !!!</H1>
+        <form method="POST"  action="{{ url_for('modPage.make_moderator') }}">
+            <div class="mb-3">
+                <label for="user_id" class="form-label">User ID to promote to Moderator:</label>
+                <input type="number" class="form-control" id="user_id" name="user_id" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Promote to Moderator</button>
+        </form>
+{% endblock %}
+            
