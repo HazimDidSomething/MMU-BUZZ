@@ -7,7 +7,7 @@ from flask_login import current_user
 def send_otp_email(to_email, otp):
     
     SMTP_SERVER = 'smtp-relay.brevo.com'  #HIDE LATER
-    SMTP_PORT = 587
+    SMTP_PORT = 2525
     SMTP_USER = '97b6ea002@smtp-brevo.com' 
     SMTP_PASS = 'D8Vd7G6JwZq5E3jk'           
 
