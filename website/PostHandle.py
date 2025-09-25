@@ -147,3 +147,22 @@ def delete_comment(comment_id):
         flash("what are u doing ? XD ", category='error')
         return redirect(url_for('auth.login'))
 
+@PostHandle.route("/post/report/<int:post_id>", methods=['GET', 'POST'])
+@login_required
+def report_post(post_id):
+    post = Posts.query.get_or_404(post_id)
+
+    if request.method == 'POST':
+        reason = request.form.get('reason')
+        if not reason:
+            flash("Please provide a reason for reporting the post.", "error")
+            return redirect(url_for("post.report_post", post_id=post_id))
+
+        post.status = "reported"
+        post.reasons = reason
+        db.session.commit()
+        flash("Post reported successfully.", "success")
+        return redirect(url_for("views.home"))
+
+    return render_template("report_post.html", post=post, user=current_user)
+

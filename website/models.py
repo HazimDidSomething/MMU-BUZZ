@@ -14,6 +14,8 @@ class Posts(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     FirstName = db.Column(db.String(150))
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=True)
+    status = db.Column(db.String(50), default="approved")
+    reasons = db.Column(db.String(10000), nullable=True)
 
     images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
     community = db.relationship("test", backref="posts", lazy=True)

@@ -12,10 +12,12 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    posts = Posts.query.order_by(Posts.date.desc()).all()
     communities = test.query.all()   # get all communities
     random.shuffle(communities)      # shuffle them
-    communities = communities[:5]  
+    communities = communities[:5] 
+    
+    posts = Posts.query.filter_by(status="approved").order_by(Posts.date.desc()).all()
+    communities = test.query.all()
     if current_user.reset_time != date.today():
         current_user.votes_remaining = 10
         current_user.reset_time = date.today()
