@@ -10,11 +10,12 @@ class Posts(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     FirstName = db.Column(db.String(150))
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=True)
+    status = db.Column(db.String(50), default="approved")
+    reasons = db.Column(db.String(10000), nullable=True)
 
     images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
     community = db.relationship("test", backref="posts", lazy=True)

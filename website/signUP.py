@@ -22,10 +22,10 @@ def sign_up():
             flash('USER ALREADY EXIST', category='error')
         elif len(email) < 4 :
             flash("Your email is too short." , category='error')
-        
+            '''
         elif not re.match(r'^[\w\.-]+@(student\.)?mmu\.edu\.my$', email):
             flash('Please use your MMU email (e.g. name@student.mmu.edu.my or name@mmu.edu.my)', category='error')
-        
+            '''
 
         elif len(FirstName) < 2:
             flash('UR NAME IS TOO SHORT.',category='error')
@@ -45,7 +45,7 @@ def sign_up():
             }
             session['otp'] = otp
             send_otp_email(email, otp)
-            flash('An OTP has been sent to your email. Please verify to complete registration.', category = 'success')
+            flash('An OTP has been sent to your email. Please verify to complete registration. It might take some time to send.', category = 'success')
             return redirect(url_for('signUP.verify_otp'))
 
     return render_template("sign_up.html",user = current_user)

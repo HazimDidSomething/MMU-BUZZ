@@ -5,13 +5,18 @@ from .models import test
 from .models import Posts,test
 from datetime import date
 from . import db
+import random
 
 views = Blueprint('views', __name__)
 
 @views.route('/')
 @login_required
 def home():
-    posts = Posts.query.order_by(Posts.date.desc()).all()
+    communities = test.query.all()   # get all communities
+    random.shuffle(communities)      # shuffle them
+    communities = communities[:5] 
+    
+    posts = Posts.query.filter_by(status="approved").order_by(Posts.date.desc()).all()
     communities = test.query.all()
     if current_user.reset_time != date.today():
         current_user.votes_remaining = 10
@@ -23,7 +28,10 @@ def ping():
     return "pong", 200
 
 @views.route("/community")
-@login_required
 def community_page():
     communities = test.query.all()
-    return render_template("community.html", user=current_user, communities=communities)
+    return render_template(
+        "viewallcommunity.html",
+        user=current_user if current_user.is_authenticated else None,
+        communities=communities
+    )

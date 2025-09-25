@@ -3,3 +3,6 @@ pls use env to run the debug and use (  pip install -r requirements.txt  ) when 
 If u have issues on env use this (  Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process  ) then  this (   .\env\Scripts\Activate  ) to activate ur env 
 
 
+$env:FLASK_APP="main.py"
+
+flask db upgrade

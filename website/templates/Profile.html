@@ -16,7 +16,11 @@
             Logout
         </button>
     </a>
-
+    <a href="{{ url_for('Profile.change_password', user_id=current_user.id) }}">
+        <button type="submit" class="btn btn-outline-warning btn-sm">
+            Change Password
+        </button>
+    </a>
     <a href="{{ url_for('Profile.del_acc') }}" >
         <button type="submit" class="btn btn-outline-danger btn-sm"
                 onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.')">

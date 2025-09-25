@@ -2,7 +2,7 @@ from flask import Blueprint ,render_template,request,flash,redirect,url_for
 import re
 from .models import User
 from flask_login import login_user, login_required,logout_user,current_user
-from werkzeug.security import check_password_hash
+from werkzeug.security import check_password_hash ,generate_password_hash
 from . import db
 from .models import Posts
 
@@ -38,3 +38,35 @@ def show_user_profile(user_id):
     user = User.query.get(user_id)
     posts = Posts.query.filter_by(user_id = user_id).all()
     return render_template("user_profile.html", user=user, posts=posts)
+
+@Profile.route('/profile/passwordChange/<int:user_id>', methods=['GET', 'POST'])
+@login_required
+def change_password(user_id):
+    if current_user.id != user_id:
+        flash('You are not authorized to change this password.', 'error')
+        return redirect(url_for('Profile.show_profile'))
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+
+        if not check_password_hash(current_user.password, current_password):
+            flash('Current password is incorrect.', 'error')
+            return redirect(url_for('Profile.change_password', user_id=user_id))
+
+        if new_password != confirm_password:
+            flash('New passwords do not match.', 'error')
+            return redirect(url_for('Profile.change_password', user_id=user_id))
+
+        if len(new_password) < 7:
+            flash('Password must be at least 7 characters long.', 'error')
+            return redirect(url_for('Profile.change_password', user_id=user_id))
+
+        user = User.query.get(user_id)
+        if user:
+            user.password = generate_password_hash(new_password, method='pbkdf2:sha256')
+            db.session.commit()
+            flash('Password updated successfully!', 'success')
+            return redirect(url_for('Profile.show_profile'))
+
+    return render_template('change_password.html', user=current_user)
