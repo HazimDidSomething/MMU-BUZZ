@@ -2,7 +2,6 @@ import smtplib
 from email.mime.text import MIMEText
 from flask import render_template
 from flask_login import current_user
-import os
 
 
 def send_otp_email(to_email, otp):
