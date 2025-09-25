@@ -45,7 +45,7 @@ def sign_up():
             }
             session['otp'] = otp
             send_otp_email(email, otp)
-            flash('An OTP has been sent to your email. Please verify to complete registration.', category = 'success')
+            flash('An OTP has been sent to your email. Please verify to complete registration. It might take some time to send.', category = 'success')
             return redirect(url_for('signUP.verify_otp'))
 
     return render_template("sign_up.html",user = current_user)

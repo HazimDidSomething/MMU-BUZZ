@@ -10,7 +10,6 @@ class Posts(db.Model):
     title = db.Column(db.String(100))
     content = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     vote = db.Column(db.Integer)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     FirstName = db.Column(db.String(150))

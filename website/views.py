@@ -5,6 +5,7 @@ from .models import test
 from .models import Posts,test
 from datetime import date
 from . import db
+import random
 
 views = Blueprint('views', __name__)
 
@@ -12,7 +13,9 @@ views = Blueprint('views', __name__)
 @login_required
 def home():
     posts = Posts.query.order_by(Posts.date.desc()).all()
-    communities = test.query.all()
+    communities = test.query.all()   # get all communities
+    random.shuffle(communities)      # shuffle them
+    communities = communities[:5]  
     if current_user.reset_time != date.today():
         current_user.votes_remaining = 10
         current_user.reset_time = date.today()

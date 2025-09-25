@@ -83,7 +83,7 @@ def delete_community(community_id):
         community_role="admin"  
     ).first()
 
-    if not membership and current_user.Role != "admin": 
+    if not membership and current_user.Role != "admin" and current_user.Role != "moderator": 
         flash("You do not have permission to delete this community!", "error")
         return redirect(url_for("community.view_community", community_id=community_id))
 
@@ -93,3 +93,10 @@ def delete_community(community_id):
 
     flash(f"Community '{community.name}' has been deleted!", "success")
     return redirect(url_for("views.home"))
+
+
+@community.route("/AllCommunity/", methods=["POST"])
+@login_required
+def view_all_communities():
+    communities = test.query.all()
+    return render_template("ViewAllCommunity.html", user=current_user, communities=communities)
