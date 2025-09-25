@@ -49,7 +49,7 @@ def create_app():
             db.create_all()
             Createmoderator()
         '''
-
+    from .community import community
     from .views import views
     from .auth import auth
     from .modPage import modPage

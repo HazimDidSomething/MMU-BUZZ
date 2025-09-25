@@ -70,6 +70,8 @@ class CommunityMember(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    community_role = db.Column(db.String(50), default="member")
+    
 
 class feedback(db.Model):
     __tablename__ = "feedback"
