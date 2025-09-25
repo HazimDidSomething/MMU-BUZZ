@@ -78,7 +78,9 @@ def create_post_in_community(community_id):
 @login_required
 def delete_community(community_id):
     membership = CommunityMember.query.filter_by(
-        user_id=current_user.id, community_id=community_id, role="admin"
+        user_id=current_user.id,
+        community_id=community_id,
+        community_role="admin"  
     ).first()
 
     if not membership and current_user.Role != "admin": 
@@ -91,5 +93,3 @@ def delete_community(community_id):
 
     flash(f"Community '{community.name}' has been deleted!", "success")
     return redirect(url_for("views.home"))
-
-
