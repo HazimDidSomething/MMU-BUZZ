@@ -95,7 +95,7 @@ def delete_community(community_id):
     return redirect(url_for("views.home"))
 
 
-@community.route("/AllCommunity/", methods=["POST"])
+@community.route("/AllCommunity")
 @login_required
 def view_all_communities():
     communities = test.query.all()

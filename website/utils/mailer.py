@@ -2,16 +2,17 @@ import smtplib
 from email.mime.text import MIMEText
 from flask import render_template
 from flask_login import current_user
+import os
 
 
 def send_otp_email(to_email, otp):
     
-    SMTP_SERVER = 'smtp-relay.brevo.com'  #HIDE LATER
+    SMTP_SERVER = os.getenv("MAIL_SERVER") 
     SMTP_PORT = 587
-    SMTP_USER = '97b6ea002@smtp-brevo.com' 
-    SMTP_PASS = 'D8Vd7G6JwZq5E3jk'           
+    SMTP_USER = os.getenv("MAIL_USERNAME")
+    SMTP_PASS = os.getenv("MAIL_PASSWORD")    
 
-    from_email = 'hazimzubair81@gmail.com'
+    from_email = os.getenv("MAIL_DEFAULT_SENDER")
     to_email = to_email
     subject = 'MMU BUZZ OTP Email'
     body = f"""Hello! WELCOME TO MMU BUZZ. Your OTP is: {otp}. Please do not share it with anyone.

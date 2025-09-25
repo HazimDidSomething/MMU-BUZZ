@@ -22,10 +22,10 @@ def sign_up():
             flash('USER ALREADY EXIST', category='error')
         elif len(email) < 4 :
             flash("Your email is too short." , category='error')
-        
+            '''
         elif not re.match(r'^[\w\.-]+@(student\.)?mmu\.edu\.my$', email):
             flash('Please use your MMU email (e.g. name@student.mmu.edu.my or name@mmu.edu.my)', category='error')
-        
+            '''
 
         elif len(FirstName) < 2:
             flash('UR NAME IS TOO SHORT.',category='error')
