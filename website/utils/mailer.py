@@ -7,12 +7,12 @@ import os
 
 def send_otp_email(to_email, otp):
     
-    SMTP_SERVER = os.getenv("MAIL_SERVER") 
+    SMTP_SERVER = 'smtp-relay.brevo.com'  #HIDE LATER
     SMTP_PORT = 587
-    SMTP_USER = os.getenv("MAIL_USERNAME")
-    SMTP_PASS = os.getenv("MAIL_PASSWORD")    
+    SMTP_USER = '97b6ea002@smtp-brevo.com' 
+    SMTP_PASS = 'D8Vd7G6JwZq5E3jk'           
 
-    from_email = os.getenv("MAIL_DEFAULT_SENDER")
+    from_email = 'hazimzubair81@gmail.com'
     to_email = to_email
     subject = 'MMU BUZZ OTP Email'
     body = f"""Hello! WELCOME TO MMU BUZZ. Your OTP is: {otp}. Please do not share it with anyone.
