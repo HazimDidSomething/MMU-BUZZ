@@ -7,34 +7,24 @@
 
 
 
-
-  <h1 class = "mb-4"> Popluar Communities</h1>
-  <div >
-  {% for post in posts %}
-    <div class="cm-card">
-      <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-        <div class="p-3 cm-card ">
-          <h5 class="mb-0">{{ post.title }}</h5>
-          <p class="card-text">
-            <small class="text-body-secondary">
-              By <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}" class="fw-bold">{{ post.FirstName }}</a> in <a href="{{ url_for('community.view_community', community_id=post.community.id) }}" class="fw-bold">{{ post.community.name }}</a>, At {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}
-            </small></p>
-          <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-          <h6 class="card-text">{{ post.content }}</h6>
-          {% if post.images %}
-            <img src="{{ post.images[0].name }}" alt="Post image" width="300">
-          {% endif %}
+  <h1 class="mb-4">Popular Communities</h1>
+  <div class="row">
+    {% for community in communities %}
+      <div class="col-md-4 mb-3">
+        <div class="card p-3 shadow-sm h-100">
+          <h5 class="card-title">{{ community.name }}</h5>
+          <p class="card-text">{{ community.description or "No description yet." }}</p>
+          <a href="{{ url_for('community.view_community', community_id=community.id) }}" 
+              class="btn btn-primary">Visit</a>
         </div>
-      </a>
-    </div>
-    </a>
-    <div class="pt-4"></div>
-  {% else %}
-        <p>No posts yet. Be the first to           
-            <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
-                    Create One !
-                </a></p>
-  {% endfor %}
+      </div>
+    {% else %}
+      <p>No communities available yet.</p>
+    {% endfor %}
+  </div>
+</div>
+
+
   </div>
 
 
@@ -42,22 +32,3 @@
 
 </div>
 {% endblock %}
-
-{% block sidenav %}
-<h2>JOIN NOW !!</h2>
-
-  {% for community in communities %}
-    <a href="{{ url_for('community.view_community', community_id=community.id) }}"
-    class="btn btn-success ">
-    {{ community.name }}
-  </a> - {{ community.description }}
-    
-    <div class="pt-4"></div>
-  {% else %}
-    <p>community available.</p>
-  {% endfor %}
-
-{% endblock %}
-
-
-{% block bottom %}

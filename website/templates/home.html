@@ -36,6 +36,22 @@
                 </a></p>
   {% endfor %}
   </div>
+   <h2 class="mt-5">All Communities</h2>
+  <div class="row">
+    {% for community in communities %}
+      <div class="col-md-4 mb-3">
+        <div class="card p-3 shadow-sm h-100">
+          <h5 class="card-title">{{ community.name }}</h5>
+          <p class="card-text">{{ community.description or "No description yet." }}</p>
+          <a href="{{ url_for('community.view_community', community_id=community.id) }}" 
+             class="btn btn-primary">Visit</a>
+        </div>
+      </div>
+    {% else %}
+      <p>No communities available yet.</p>
+    {% endfor %}
+  </div>
+
 
 
 

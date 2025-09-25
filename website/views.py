@@ -28,7 +28,10 @@ def ping():
     return "pong", 200
 
 @views.route("/community")
-@login_required
 def community_page():
     communities = test.query.all()
-    return render_template("community.html", user=current_user, communities=communities)
+    return render_template(
+        "viewallcommunity.html",
+        user=current_user if current_user.is_authenticated else None,
+        communities=communities
+    )
