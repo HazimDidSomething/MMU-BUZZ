@@ -17,5 +17,3 @@ instance/
 
 # Logs
 *.log
-
-website/static/uploads/
