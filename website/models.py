@@ -59,6 +59,13 @@ class test(db.Model):
     description = db.Column(db.Text, nullable=True)
     created_at = db.Column(db.DateTime(timezone=True), default=func.now())
 
+    members = db.relationship(
+        "CommunityMember",
+        backref="community",
+        cascade="all, delete-orphan"
+    )
+
+
     def __repr__(self):
         return f"<Communities {self.name}>"
 
@@ -67,9 +74,12 @@ class CommunityMember(db.Model):
     __tablename__ = "communities_members"
 
     id = db.Column(db.Integer, primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey("user.id"), nullable=False)
-    community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=False)
+    user_id = db.Column(db.Integer, db.ForeignKey("user.id", ondelete="CASCADE"), nullable=False)
+    community_id = db.Column(db.Integer, db.ForeignKey("communities.id", ondelete="CASCADE"), nullable=False)
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
+    community_role = db.Column(db.String(50), default="member")
+
+    
 
 class feedback(db.Model):
     __tablename__ = "feedback"
