@@ -2,7 +2,7 @@
 from flask import Blueprint, render_template
 from flask_login import login_required, current_user
 from .models import test
-from .models import Posts,test
+from .models import Posts,test, PostComment, feedback
 from datetime import date
 from . import db
 import random

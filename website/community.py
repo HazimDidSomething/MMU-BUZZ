@@ -121,9 +121,13 @@ def view_reported_posts(community_id):
     user_id = current_user.id
     
     # Check if user is an admin of this community
-    memeber = CommunityMember.query.filter_by(user_id=user_id, community_id=community_id).first()
+    membership = CommunityMember.query.filter_by(
+        user_id=current_user.id,
+        community_id=community_id,
+        community_role="admin"  
+    ).first()
 
-    if not (memeber and memeber.community_role == "admin") or current_user.Role != "moderator":
+    if not membership and current_user.Role != "admin" and current_user.Role != "moderator": 
         flash("You do not have permission to view reported posts.", "error")
         return redirect(url_for("community.view_community", community_id=community_id))
         

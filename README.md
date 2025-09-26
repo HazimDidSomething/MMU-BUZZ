@@ -6,3 +6,5 @@ If u have issues on env use this (  Set-ExecutionPolicy -ExecutionPolicy RemoteS
 $env:FLASK_APP="main.py"
 
 flask db upgrade
+
+flask db migrate -m ""

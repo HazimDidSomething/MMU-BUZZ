@@ -36,7 +36,6 @@ class PostComment(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     Firstname = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
-    user = db.relationship("User", backref="comments")
     
 
 class User(db.Model, UserMixin):
@@ -48,6 +47,8 @@ class User(db.Model, UserMixin):
     votes_remaining = db.Column(db.Integer, default=10)
     reset_time = db.Column(db.Date,default=lambda: date.today())
     posts = db.relationship("Posts", backref="author", cascade="all, delete-orphan")
+    comments = db.relationship("PostComment", backref="user", cascade="all, delete-orphan")
+    feedbacks = db.relationship("feedback", backref="user", cascade="all, delete-orphan")
     otp = db.Column(db.String(6), nullable=True)
 
 
@@ -90,4 +91,3 @@ class feedback(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     Firstname = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
-    user = db.relationship("User", backref="feedbacks")  
