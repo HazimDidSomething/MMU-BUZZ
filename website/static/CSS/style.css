@@ -49,3 +49,6 @@ html, body {
 .overflow-auto {
     overflow-y: auto;  
 }
+a {
+    word-break: break-word;
+}

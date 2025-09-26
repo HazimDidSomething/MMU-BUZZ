@@ -13,16 +13,19 @@
   {% for post in posts %}
     <div class="cm-card">
       <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-        <div class="p-3 cm-card ">
-          <h5 class="mb-0">{{ post.title }}</h5>
-          <p class="card-text">
-            <small class="text-body-secondary">
-              By <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}" class="fw-bold">{{ post.FirstName }}</a> in <a href="{{ url_for('community.view_community', community_id=post.community.id) }}" class="fw-bold">{{ post.community.name }}</a>, At {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}
-            </small></p>
+        <div class="p-3 cm-card h-100 w-100 shadow-sm">
+          <h5 class="mb-0 text" style="word-wrap: break-word; overflow-wrap: break-word;">
+              {{ post.title }}
+          </h5>
+          <small class="text-body-secondary  d-block" style="word-wrap: break-word; overflow-wrap: break-word;"><p>By
+              <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}" class="fw-bold"> {{ post.FirstName }}</a> 
+              in <a href="{{ url_for('community.view_community', community_id=post.community.id) }}" class="fw-bold">{{ post.community.name }}</a>, 
+              At {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}
+          </p></small>
           <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
           <h6 class="card-text">{{ post.content }}</h6>
           {% if post.images %}
-            <img src="{{ post.images[0].name }}" alt="Post image" width="300">
+            <img src="{{ post.images[0].name }}" alt="Post image" class="img-fluid rounded" width="300">
           {% endif %}
         </div>
       </a>
@@ -36,25 +39,6 @@
                 </a></p>
   {% endfor %}
   </div>
-   <h2 class="mt-5">All Communities</h2>
-  <div class="row">
-    {% for community in communities %}
-      <div class="col-md-4 mb-3">
-        <div class="card p-3 shadow-sm h-100">
-          <h5 class="card-title">{{ community.name }}</h5>
-          <p class="card-text">{{ community.description or "No description yet." }}</p>
-          <a href="{{ url_for('community.view_community', community_id=community.id) }}" 
-             class="btn btn-primary">Visit</a>
-        </div>
-      </div>
-    {% else %}
-      <p>No communities available yet.</p>
-    {% endfor %}
-  </div>
-
-
-
-
 
 </div>
 {% endblock %}

@@ -1,4 +1,4 @@
-from .models import Posts,PostsImg,PostComment,test
+from .models import Posts,PostsImg,PostComment,test,CommunityMember,User
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
 from flask_login import current_user,login_required,logout_user
@@ -106,8 +106,10 @@ def downvote(post_id):
 @PostHandle.route("/post/delete/<int:post_id>")
 @login_required
 def delete(post_id):
-
-    if current_user.Role ==  "moderator":
+    post = Posts.query.get_or_404(post_id)
+    community_admins = CommunityMember.query.filter_by(community_id=post.community_id, community_role="admin").all()
+    admin_users = [member.user_id for member in community_admins]
+    if current_user.Role ==  "moderator" or current_user.id in admin_users:
         post = Posts.query.get_or_404(post_id)
         for img in post.images:
             cloudinary.uploader.destroy(img.public_id)
@@ -121,6 +123,7 @@ def delete(post_id):
         logout_user()
         flash("what are u doing ? XD ", category='error')
         return redirect(url_for('auth.login'))
+    
 @PostHandle.route("/post/comment/<int:post_id>", methods = ['POST'])
 @login_required
 def comment(post_id):
