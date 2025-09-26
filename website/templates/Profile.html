@@ -21,6 +21,8 @@
             Change Password
         </button>
     </a>
+    <a href="{{ url_for('modPage.submit_feedback') }}" class="btn btn-outline-info">
+    Feedback/Issues</a>
     <a href="{{ url_for('Profile.del_acc') }}" >
         <button type="submit" class="btn btn-outline-danger btn-sm"
                 onclick="return confirm('Are you sure you want to delete your account? This cannot be undone.')">
