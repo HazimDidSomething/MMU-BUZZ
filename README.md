@@ -8,3 +8,4 @@ $env:FLASK_APP="main.py"
 flask db upgrade
 
 flask db migrate -m ""
+
