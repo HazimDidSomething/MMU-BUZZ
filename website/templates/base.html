@@ -103,18 +103,23 @@
 
             {% if user.is_authenticated %}
             <nav class="navbar fixed-bottom d-flex d-lg-none justify-content-around p-2 cm-nav">
-            <a href="/AllCommunity" class="btn btn-outline-light flex-fill mx-1">
-                <i class="bi bi-people"></i> Community
-            </a>
-            <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light flex-fill mx-1">
+                <a href="/AllCommunity" class="btn btn-outline-light flex-fill mx-1">
+                    <i class="bi bi-people"></i> Community
+                </a>
+                <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light flex-fill mx-1">
                     <i class="bi bi-plus-lg"></i> POST
-            </a>
-
-            <a href="/Profile" class="btn btn-outline-light flex-fill mx-1">Profile</a>
+                </a>
+                <a href="/Profile" class="btn btn-outline-light flex-fill mx-1">Profile</a>
+            </nav>
             {% else %}
+    {% if request.endpoint not in ['auth.login', 'auth.sign_up'] %}
+            <nav class="navbar fixed-bottom d-flex d-lg-none justify-content-around p-2 cm-nav">
                 <a class="btn btn-outline-light flex-fill mx-1" href="/login">Login</a>
                 <a class="btn btn-outline-light flex-fill mx-1" href="/sign-up">Sign up</a>
+            </nav>
             {% endif %}
+        {% endif %}
+
 </nav>
 
         </div>
