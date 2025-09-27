@@ -1,10 +1,11 @@
-from .models import Posts,PostsImg,PostComment,test,CommunityMember,User
+from .models import Posts,PostsImg,PostComment,test,CommunityMember,User,CommunityFlair
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
 from flask_login import current_user,login_required,logout_user
 from werkzeug.utils import secure_filename
 import os
 import cloudinary.uploader
+
 
 UPLOAD_FOLDER = os.path.join("website", "static", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -15,14 +16,15 @@ PostHandle = Blueprint('post',__name__)
 @login_required
 def CreatePost(community_id=None):
     communities = test.query.all()
-    
+    flairs = CommunityFlair.query.filter_by(community_id=community_id).all() if community_id else []
+
     if request.method == "POST":
         if not community_id:
             community_id = request.form.get("community_id")
         community = test.query.get_or_404(community_id)
         title = request.form.get("title")
         content = request.form.get("content")
-        
+        flair_id = request.form.get("flair_id")
             
         PIC = request.files.get("PIC")
         new_post = Posts(
@@ -31,8 +33,10 @@ def CreatePost(community_id=None):
             user_id = current_user.id,
             community_id = community_id,
             FirstName = current_user.FirstName,
-            vote = 0
+            vote = 0,
+             flair_id=flair_id if flair_id else None 
         )
+        
 
         db.session.add(new_post)
         db.session.commit()
@@ -55,7 +59,7 @@ def CreatePost(community_id=None):
         flash("Post created!", "success")
         return redirect(url_for("views.home"))
     community = test.query.get_or_404(community_id) if community_id else None
-    return render_template("CreatePost.html", user = current_user,communities=communities,community=community )
+    return render_template("CreatePost.html", user = current_user,communities=communities,community=community,flairs=flairs) 
 
 @PostHandle.route("/post/<int:post_id>")
 @login_required
