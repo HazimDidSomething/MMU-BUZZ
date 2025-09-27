@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %} Image Zoom Demo {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">🖼️ Image Zoom Feature Demo</h1>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="cm-card">
+                <h3>📱 Click-to-Zoom</h3>
+                <p>Click on any image below to open it in fullscreen mode with zoom controls.</p>
+                <img src="https://picsum.photos/400/300?random=1" alt="Sample image 1" class="zoomable-image" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="cm-card">
+                <h3>🖱️ Hover Zoom (Desktop)</h3>
+                <p>Hover over this image to see a magnified preview (desktop only).</p>
+                <img src="https://picsum.photos/400/300?random=2" alt="Sample image 2" class="zoomable-image" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-4">
+            <div class="cm-card">
+                <h3>📐 Responsive Scaling</h3>
+                <p>Images automatically scale to fit your screen while maintaining aspect ratio.</p>
+                <img src="https://picsum.photos/600/400?random=3" alt="Sample image 3" class="zoomable-image" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-4">
+            <div class="cm-card">
+                <h3>🎯 Multiple Images</h3>
+                <p>All images on the page automatically become zoomable.</p>
+                <img src="https://picsum.photos/400/500?random=4" alt="Sample image 4" class="zoomable-image" style="max-width: 100%; height: auto;">
+            </div>
+        </div>
+    </div>
+    
+    <div class="cm-card">
+        <h3>⌨️ Keyboard Controls</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>When zoom modal is open:</h5>
+                <ul>
+                    <li><kbd>Esc</kbd> - Close modal</li>
+                    <li><kbd>+</kbd> or <kbd>=</kbd> - Zoom in</li>
+                    <li><kbd>-</kbd> - Zoom out</li>
+                    <li><kbd>0</kbd> - Reset zoom</li>
+                    <li><kbd>Arrow Keys</kbd> - Pan around zoomed image</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Touch Gestures (Mobile):</h5>
+                <ul>
+                    <li><strong>Tap</strong> - Open zoom modal</li>
+                    <li><strong>Pinch</strong> - Zoom in/out</li>
+                    <li><strong>Drag</strong> - Pan around zoomed image</li>
+                    <li><strong>Double tap</strong> - Reset zoom</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cm-card">
+        <h3>♿ Accessibility Features</h3>
+        <ul>
+            <li>Full keyboard navigation support</li>
+            <li>Screen reader compatible</li>
+            <li>Focus indicators for keyboard users</li>
+            <li>ARIA labels and roles</li>
+            <li>High contrast support</li>
+        </ul>
+    </div>
+</div>
+{% endblock %}

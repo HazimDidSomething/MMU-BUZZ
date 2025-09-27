@@ -19,7 +19,7 @@
             <p class="card-text"><small class="text-body-secondary">By {{post.FirstName}} ,At {{post.date}}</small></p>
             <h6 class="card-text ">{{post.content}}</h6>
             {% if post.images %}
-              <img src="{{ post.images[0].name }}" alt="Post image" width="300">
+              <img src="{{ post.images[0].name }}" alt="Post image" class="zoomable-image" style="max-width: 300px; height: auto;">
             {% endif %}
           </div>
           </div>

@@ -34,3 +34,7 @@ def community_page():
         user=current_user if current_user.is_authenticated else None,
         communities=communities
     )
+
+@views.route("/zoom-demo")
+def zoom_demo():
+    return render_template("zoom_demo.html")
