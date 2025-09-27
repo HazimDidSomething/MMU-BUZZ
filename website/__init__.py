@@ -13,6 +13,7 @@ DB_name = "database.db"
 import os
 
 
+
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = "[|_MMU_)(!BUZZ#)-=1?[|]"
@@ -55,8 +56,10 @@ def create_app():
     from .modPage import modPage
     from .Profile import Profile
     from .PostHandle import PostHandle
-    from .community import community
     from .signUP import signUP
+    from .bookmarks import bookmarks
+    from .flairs import flairs
+    from .badges import badges
 
     app.register_blueprint(signUP, url_prefix='/')
     app.register_blueprint(modPage, url_prefix='/')
@@ -65,6 +68,9 @@ def create_app():
     app.register_blueprint(Profile,url_prefix='/')
     app.register_blueprint(PostHandle,url_prefix='/')
     app.register_blueprint(community,url_prefix='/')
+    app.register_blueprint(bookmarks, url_prefix='/')
+    app.register_blueprint(flairs, url_prefix='/')
+    app.register_blueprint(badges, url_prefix='/')
 
     from .models import User, test, CommunityMember
 
@@ -77,6 +83,8 @@ def create_app():
     def load_user(id):
         return User.query.get(int(id))
     return app
+
+
 
 def Createmoderator():
     from .models import User

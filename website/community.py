@@ -1,8 +1,10 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 from flask_login import login_required, current_user
 from . import db
-from .models import test, CommunityMember, Posts
+from .models import test, CommunityMember, Posts, CommunityFlair
 from .models import test
+from .utils.karma import award_karma
+from .utils.badges import check_community_builder_badge
 
 community = Blueprint("community", __name__)
 
@@ -20,6 +22,7 @@ def view_community(community_id):
     return render_template("view_community.html", community=community, posts=posts, members=members, user=current_user, is_admin=is_admin)
 
 @community.route("/create_community", methods=["GET", "POST"])
+@login_required
 def create_community():
     if request.method == "POST":
         name = request.form.get("name")
@@ -40,7 +43,16 @@ def create_community():
         print(creator)
         db.session.add(creator)
         db.session.commit()
-        flash("Community created successfully!", "success")
+        # +10 karma for creating a community
+        badges_awarded = award_karma(current_user, 10, "create_community")
+        # Check for community builder badge
+        if check_community_builder_badge(current_user):
+            badges_awarded.append('Community Builder')
+        
+        if badges_awarded:
+            flash(f"Community created successfully! 🏆 Earned badges: {', '.join(badges_awarded)}", "success")
+        else:
+            flash("Community created successfully!", "success")
         return redirect(url_for("views.home"))
 
     return render_template("create_community.html", user=current_user)
@@ -54,6 +66,7 @@ def create_post_in_community(community_id):
     if request.method == "POST":
         title = request.form.get("title")
         content = request.form.get("content")
+        flair_id = request.form.get("flair_id")
 
         if not title or not content:
             flash("Title and content are required", "error")
@@ -64,7 +77,8 @@ def create_post_in_community(community_id):
             content=content,
             user_id=current_user.id,
             FirstName=current_user.FirstName,
-            community_id=community.id
+            community_id=community.id,
+            flair_id=flair_id if flair_id else None
         )
 
         db.session.add(new_post)
@@ -72,7 +86,8 @@ def create_post_in_community(community_id):
         flash("Post created successfully!", "success")
         return redirect(url_for("community.view_community", community_id=community.id))
 
-    return render_template("create_post_in_community.html", community=community, user=current_user)
+    flairs = CommunityFlair.query.filter_by(community_id=community_id).all()
+    return render_template("create_post_in_community.html", community=community, user=current_user, flairs=flairs)
 
 @community.route("/community/<int:community_id>/delete", methods=["POST"])
 @login_required
@@ -93,6 +108,7 @@ def delete_community(community_id):
 
     flash(f"Community '{community.name}' has been deleted!", "success")
     return redirect(url_for("views.home"))
+
 
 
 @community.route("/AllCommunity")
@@ -123,7 +139,7 @@ def view_reported_posts(community_id):
     # Check if user is an admin of this community
     memeber = CommunityMember.query.filter_by(user_id=user_id, community_id=community_id).first()
 
-    if not (memeber and memeber.community_role == "admin") or current_user.Role != "moderator":
+    if not ((memeber and memeber.community_role == "admin") or current_user.Role == "moderator"):
         flash("You do not have permission to view reported posts.", "error")
         return redirect(url_for("community.view_community", community_id=community_id))
         

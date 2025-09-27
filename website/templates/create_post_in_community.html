@@ -14,6 +14,18 @@
         <textarea class="form-control" id="content" name="content" rows="5" required></textarea>
     </div>
 
+    {% if flairs %}
+    <div class="form-group">
+        <label for="flair_id">Select Flair (Optional):</label>
+        <select class="form-control" id="flair_id" name="flair_id">
+            <option value="">No flair</option>
+            {% for flair in flairs %}
+                <option value="{{flair.id}}">{{flair.name}}</option>
+            {% endfor %}
+        </select>
+    </div>
+    {% endif %}
+
     <button type="submit" class="btn btn-primary">Post</button>
     <a href="{{ url_for('community.view_community', community_id=community.id) }}" class="btn btn-secondary">Cancel</a>
 </form>

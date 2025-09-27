@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+{% block title %} My Badges {% endblock %}
+
+{% block content %}
+<div class="container">
+  <h1 class="mb-4">🏆 My Badges</h1>
+  
+  <div class="row mb-4">
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3 class="text-primary">{{ user.karma }}</h3>
+          <p class="mb-0">Total Karma</p>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-6">
+      <div class="card">
+        <div class="card-body text-center">
+          <h3 class="text-success">{{ user_badges|length }}</h3>
+          <p class="mb-0">Badges Earned</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <h2 class="mb-3">Earned Badges</h2>
+  {% if user_badges %}
+    <div class="row">
+      {% for badge in user_badges %}
+        <div class="col-md-4 mb-3">
+          <div class="card border-success">
+            <div class="card-body text-center">
+              <i class="{{ badge.icon }} fs-1 text-success mb-2"></i>
+              <h5 class="card-title">{{ badge.name }}</h5>
+              <p class="card-text">{{ badge.description }}</p>
+              <small class="text-muted">Earned: {{ badge.earned_at.strftime('%Y-%m-%d') }}</small>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="alert alert-info">
+      <h4>No badges earned yet!</h4>
+      <p>Start engaging with the community to earn your first badge:</p>
+      <ul>
+        <li>Create posts and get upvotes</li>
+        <li>Build communities</li>
+        <li>Maintain login streaks</li>
+        <li>Reach karma milestones (100, 500, 1000)</li>
+      </ul>
+    </div>
+  {% endif %}
+
+  <h2 class="mb-3 mt-5">All Available Badges</h2>
+  <div class="row">
+    {% for badge in all_badges %}
+      <div class="col-md-4 mb-3">
+        <div class="card {% if badge.earned %}border-success{% else %}border-secondary{% endif %}">
+          <div class="card-body text-center">
+            <i class="{{ badge.icon }} fs-1 mb-2 {% if badge.earned %}text-success{% else %}text-muted{% endif %}"></i>
+            <h5 class="card-title {% if badge.earned %}text-success{% else %}text-muted{% endif %}">
+              {{ badge.name }}
+              {% if badge.earned %}<i class="bi bi-check-circle-fill text-success"></i>{% endif %}
+            </h5>
+            <p class="card-text">{{ badge.description }}</p>
+            {% if badge.karma_threshold %}
+              <small class="text-muted">Requires {{ badge.karma_threshold }} karma</small>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

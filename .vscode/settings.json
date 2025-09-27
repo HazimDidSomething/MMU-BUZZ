@@ -1,0 +1,14 @@
+{
+    "css.validate": false,
+    "scss.validate": false,
+    "less.validate": false,
+    "files.associations": {
+        "*.html": "html"
+    },
+    "emmet.includeLanguages": {
+        "jinja-html": "html"
+    },
+    "html.customData": [
+        ".vscode/html_custom_data.json"
+    ]
+}

@@ -1,10 +1,12 @@
-from .models import Posts,PostsImg,PostComment,test
+from .models import Posts,PostsImg,PostComment,test,CommunityFlair
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
 from flask_login import current_user,login_required,logout_user
 from werkzeug.utils import secure_filename
 import os
 import cloudinary.uploader
+from .utils.karma import award_karma
+from .utils.badges import check_post_master_badge
 
 UPLOAD_FOLDER = os.path.join("website", "static", "uploads")
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
@@ -22,6 +24,7 @@ def CreatePost(community_id=None):
         community = test.query.get_or_404(community_id)
         title = request.form.get("title")
         content = request.form.get("content")
+        flair_id = request.form.get("flair_id")
         
             
         PIC = request.files.get("PIC")
@@ -31,11 +34,18 @@ def CreatePost(community_id=None):
             user_id = current_user.id,
             community_id = community_id,
             FirstName = current_user.FirstName,
-            vote = 0
+            vote = 0,
+            flair_id = flair_id if flair_id else None
         )
 
         db.session.add(new_post)
         db.session.commit()
+        
+        # Check for post master badge
+        badges_awarded = []
+        if check_post_master_badge(current_user):
+            badges_awarded.append('Post Master')
+        
         if PIC and PIC.filename != "":
             #print("herer")
 
@@ -52,10 +62,14 @@ def CreatePost(community_id=None):
         else:
             print("e")
         
-        flash("Post created!", "success")
+        if badges_awarded:
+            flash(f"Post created! 🏆 Earned badges: {', '.join(badges_awarded)}", "success")
+        else:
+            flash("Post created!", "success")
         return redirect(url_for("views.home"))
     community = test.query.get_or_404(community_id) if community_id else None
-    return render_template("CreatePost.html", user = current_user,communities=communities,community=community )
+    flairs = CommunityFlair.query.filter_by(community_id=community_id).all() if community_id else []
+    return render_template("CreatePost.html", user = current_user,communities=communities,community=community,flairs=flairs )
 
 @PostHandle.route("/post/<int:post_id>")
 @login_required
@@ -77,8 +91,14 @@ def upvote(post_id):
         post.vote = upvote_num + 1
         UserVote = current_user.votes_remaining
         current_user.votes_remaining = UserVote - 1
-        print(current_user.votes_remaining)
-        print("upvote")
+        # +5 karma to post author
+        try:
+            from .models import User
+            author = User.query.get(post.user_id)
+            if author:
+                award_karma(author, 5, "post_upvote")
+        except Exception:
+            pass
         db.session.commit()
         img = PostsImg.query.filter_by(post_id=post_id).first()
 
@@ -96,8 +116,6 @@ def downvote(post_id):
         post.vote = downvote_num -  1
         UserVote = current_user.votes_remaining
         current_user.votes_remaining = UserVote - 1
-        print(current_user.votes_remaining)
-        print("downvote")
         db.session.commit()
         img = PostsImg.query.filter_by(post_id=post_id).first()
 
