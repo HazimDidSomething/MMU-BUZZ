@@ -16,7 +16,9 @@ class Posts(db.Model):
     community_id = db.Column(db.Integer, db.ForeignKey("communities.id"), nullable=True)
     status = db.Column(db.String(50), default="approved")
     reasons = db.Column(db.String(10000), nullable=True)
-
+    flair_id = db.Column(db.Integer, db.ForeignKey("community_flairs.id"), nullable=True)
+    
+    flair = db.relationship("CommunityFlair", backref="posts")
     images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
     community = db.relationship("test", backref="posts", lazy=True)
 
@@ -91,3 +93,13 @@ class feedback(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id',ondelete="CASCADE"))
     Firstname = db.Column(db.String(10000))
     date = db.Column(db.DateTime(timezone=False), default=func.now())
+
+    # New class for community flairs
+class CommunityFlair(db.Model):
+    __tablename__ = "community_flairs"
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(50), nullable=False)
+    color = db.Column(db.String(20), default="#6c757d") # Default color (Bootstrap secondary)
+    community_id = db.Column(db.Integer, db.ForeignKey("communities.id", ondelete="CASCADE"), nullable=False)
+    created_at = db.Column(db.DateTime(timezone=True), default=func.now())

@@ -12,8 +12,8 @@ views = Blueprint('views', __name__)
 @views.route('/')
 @login_required
 def home():
-    communities = test.query.all()   # get all communities
-    random.shuffle(communities)      # shuffle them
+    communities = test.query.all()   
+    random.shuffle(communities)      
     communities = communities[:5] 
     
     posts = Posts.query.filter_by(status="approved").order_by(Posts.date.desc()).all()

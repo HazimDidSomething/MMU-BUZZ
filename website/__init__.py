@@ -57,6 +57,7 @@ def create_app():
     from .PostHandle import PostHandle
     from .community import community
     from .signUP import signUP
+    from .FlairsNew import FlairsNew 
 
     app.register_blueprint(signUP, url_prefix='/')
     app.register_blueprint(modPage, url_prefix='/')
@@ -65,6 +66,7 @@ def create_app():
     app.register_blueprint(Profile,url_prefix='/')
     app.register_blueprint(PostHandle,url_prefix='/')
     app.register_blueprint(community,url_prefix='/')
+    app.register_blueprint(FlairsNew,url_prefix='/')
 
     from .models import User, test, CommunityMember
 

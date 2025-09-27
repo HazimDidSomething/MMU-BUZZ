@@ -27,6 +27,11 @@
           {% if post.images %}
             <img src="{{ post.images[0].name }}" alt="Post image" class="img-fluid rounded" width="300">
           {% endif %}
+          {% if post.flair %}
+            <span class="badge ms-2" style="background-color: {{ post.flair.color }}">
+          {{ post.flair.name }}
+            </span>
+          {% endif %}
         </div>
       </a>
     </div>
