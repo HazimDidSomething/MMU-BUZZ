@@ -1,10 +1,11 @@
-from .models import Posts,PostsImg,PostComment,test,CommunityFlair
+from .models import Posts,PostsImg,PostComment,test,CommunityFlair,AnonymousPoll,AnonymousReveal
 from flask import Blueprint ,render_template,request,flash,redirect,url_for,Request
 from . import db
 from flask_login import current_user,login_required,logout_user
 from werkzeug.utils import secure_filename
 import os
 import cloudinary.uploader
+from datetime import datetime
 from .utils.karma import award_karma
 from .utils.badges import check_post_master_badge
 
@@ -26,6 +27,23 @@ def CreatePost(community_id=None):
         content = request.form.get("content")
         flair_id = request.form.get("flair_id")
         
+        # Anonymous mode fields
+        is_anonymous = request.form.get("is_anonymous") == "on"
+        is_secret = request.form.get("is_secret") == "on"
+        reveal_type = request.form.get("reveal_type", "none")
+        reveal_date = request.form.get("reveal_date")
+        vote_threshold = request.form.get("vote_threshold")
+        
+        # Poll fields
+        poll_question = request.form.get("poll_question")
+        poll_multiple_choice = request.form.get("poll_multiple_choice") == "on"
+        poll_expires = request.form.get("poll_expires")
+        
+        # Collect poll options
+        poll_options = []
+        for key, value in request.form.items():
+            if key.startswith("poll_option_") and value.strip():
+                poll_options.append(value.strip())
             
         PIC = request.files.get("PIC")
         new_post = Posts(
@@ -35,10 +53,49 @@ def CreatePost(community_id=None):
             community_id = community_id,
             FirstName = current_user.FirstName,
             vote = 0,
-            flair_id = flair_id if flair_id else None
+            flair_id = flair_id if flair_id else None,
+            is_anonymous = is_anonymous,
+            is_secret = is_secret,
+            anonymous_author_id = current_user.id if is_anonymous else None
         )
 
         db.session.add(new_post)
+        db.session.commit()
+        
+        # Handle anonymous reveal settings
+        if is_anonymous and reveal_type != "none":
+            reveal_date_obj = None
+            reveal_condition = None
+            
+            if reveal_type == "time_delayed" and reveal_date:
+                reveal_date_obj = datetime.fromisoformat(reveal_date.replace('T', ' '))
+                new_post.reveal_date = reveal_date_obj
+            elif reveal_type == "community_vote" and vote_threshold:
+                reveal_condition = {"vote_threshold": int(vote_threshold)}
+            
+            anonymous_reveal = AnonymousReveal(
+                post_id=new_post.id,
+                reveal_type=reveal_type,
+                scheduled_reveal_date=reveal_date_obj,
+                reveal_condition=reveal_condition
+            )
+            db.session.add(anonymous_reveal)
+        
+        # Handle anonymous poll creation
+        if is_anonymous and poll_question and len(poll_options) >= 2:
+            poll_expires_obj = None
+            if poll_expires:
+                poll_expires_obj = datetime.fromisoformat(poll_expires.replace('T', ' '))
+            
+            anonymous_poll = AnonymousPoll(
+                post_id=new_post.id,
+                question=poll_question,
+                options=poll_options,
+                is_multiple_choice=poll_multiple_choice,
+                expires_at=poll_expires_obj
+            )
+            db.session.add(anonymous_poll)
+        
         db.session.commit()
         
         # Check for post master badge

@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="{{url_for('static', filename = 'CSS/style.css')}}">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
     <script src="{{url_for('static', filename = 'JS/image-zoom.js')}}" defer></script>
+    <script src="{{url_for('static', filename = 'JS/anonymous-mode.js')}}" defer></script>
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='uploads/mmubuzz.png') }}">
 
         
@@ -48,6 +49,7 @@
                     {% endif %}
                     {% if current_user.Role == "moderator" %}
                     <a class="nav-item nav-link" id="home" href="/mod-page">MOD PAGE</a>
+                    <a class="nav-item nav-link" id="anonymous-moderator" href="/anonymous-moderator">👻 ANONYMOUS</a>
                     {% endif %}
                 </div>
             <!-- this will be shown on the right side on the nav bar -->

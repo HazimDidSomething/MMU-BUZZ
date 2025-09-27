@@ -1,0 +1,175 @@
+{% extends "base.html" %}
+{% block title %} Anonymous Mode Demo {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">👻 Anonymous Mode Feature Demo</h1>
+    
+    <div class="row">
+        <div class="col-md-8">
+            <div class="cm-card">
+                <h3>🎭 What is Anonymous Mode?</h3>
+                <p>Anonymous Mode allows users to post and comment without revealing their identity. This encourages honest feedback, sensitive discussions, and free expression while maintaining community safety.</p>
+                
+                <div class="alert alert-info">
+                    <h5><i class="bi bi-info-circle"></i> Key Features:</h5>
+                    <ul class="mb-0">
+                        <li><strong>Anonymous Posts:</strong> Post without revealing your identity</li>
+                        <li><strong>Secret Posts:</strong> Only visible to moderators</li>
+                        <li><strong>Anonymous Polls:</strong> "What do you really think?" polls</li>
+                        <li><strong>Time-Delayed Reveals:</strong> Author revealed after a set time</li>
+                        <li><strong>Vote-Based Reveals:</strong> Author revealed when post reaches vote threshold</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="cm-card">
+                <h3>🔧 How to Use Anonymous Mode</h3>
+                
+                <h5>1. Creating Anonymous Posts</h5>
+                <ol>
+                    <li>Go to "Create Post"</li>
+                    <li>Click the <button class="anonymous-toggle" style="pointer-events: none;"><span class="toggle-icon">👤</span> Post Anonymously</button> button</li>
+                    <li>Configure your anonymous settings</li>
+                    <li>Write your post and submit</li>
+                </ol>
+                
+                <h5>2. Anonymous Settings</h5>
+                <div class="anonymous-settings">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" checked disabled>
+                        <label class="form-check-label">
+                            <strong>Secret Post</strong> - Only visible to community moderators
+                        </label>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label class="form-label">Reveal Type:</label>
+                        <select class="form-select" disabled>
+                            <option>No reveal</option>
+                            <option selected>Time-delayed reveal</option>
+                            <option>Reveal on vote threshold</option>
+                            <option>Moderator approval required</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <h5>3. Anonymous Polls</h5>
+                <div class="anonymous-poll">
+                    <div class="anonymous-poll-question">What do you really think about this feature?</div>
+                    <div class="anonymous-poll-options">
+                        <div class="anonymous-poll-option">
+                            <input type="radio" name="demo_poll" value="Love it!" id="demo_option1">
+                            <label for="demo_option1" class="option-text">Love it! 🎉</label>
+                        </div>
+                        <div class="anonymous-poll-option">
+                            <input type="radio" name="demo_poll" value="It's okay" id="demo_option2">
+                            <label for="demo_option2" class="option-text">It's okay 👍</label>
+                        </div>
+                        <div class="anonymous-poll-option">
+                            <input type="radio" name="demo_poll" value="Needs work" id="demo_option3">
+                            <label for="demo_option3" class="option-text">Needs work 🔧</label>
+                        </div>
+                    </div>
+                    <button class="anonymous-poll-submit" disabled>Vote</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="cm-card">
+                <h4>👮 Moderator Features</h4>
+                <p>Moderators have special access to anonymous content:</p>
+                <ul>
+                    <li>View all secret posts</li>
+                    <li>Reveal anonymous authors</li>
+                    <li>Approve time-delayed reveals</li>
+                    <li>Monitor anonymous activity</li>
+                </ul>
+                {% if current_user.Role in ['moderator', 'admin'] %}
+                    <a href="/anonymous-moderator" class="btn btn-primary">Go to Anonymous Management</a>
+                {% endif %}
+            </div>
+            
+            <div class="cm-card">
+                <h4>📊 Anonymous Statistics</h4>
+                <div class="text-center">
+                    <h2 class="text-primary">0</h2>
+                    <p class="mb-0">Anonymous Posts</p>
+                </div>
+                <div class="text-center mt-3">
+                    <h2 class="text-danger">0</h2>
+                    <p class="mb-0">Secret Posts</p>
+                </div>
+                <div class="text-center mt-3">
+                    <h2 class="text-success">0</h2>
+                    <p class="mb-0">Revealed Authors</p>
+                </div>
+            </div>
+            
+            <div class="cm-card">
+                <h4>🛡️ Privacy & Safety</h4>
+                <ul class="small">
+                    <li>Anonymous posts are still moderated</li>
+                    <li>Inappropriate content can be reported</li>
+                    <li>Moderators can reveal authors if needed</li>
+                    <li>All activity is logged for safety</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cm-card mt-4">
+        <h3>🎯 Use Cases for Anonymous Mode</h3>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>✅ Good Uses:</h5>
+                <ul>
+                    <li>Honest feedback on sensitive topics</li>
+                    <li>Reporting issues without fear</li>
+                    <li>Asking embarrassing questions</li>
+                    <li>Sharing personal struggles</li>
+                    <li>Voting on controversial topics</li>
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>❌ Not For:</h5>
+                <ul>
+                    <li>Harassment or bullying</li>
+                    <li>Spreading misinformation</li>
+                    <li>Hate speech or discrimination</li>
+                    <li>Spam or off-topic content</li>
+                    <li>Violating community guidelines</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cm-card mt-4">
+        <h3>🚀 Try It Out!</h3>
+        <p>Ready to experience anonymous mode? Create your first anonymous post!</p>
+        <a href="{{ url_for('post.CreatePost') }}" class="btn btn-primary btn-lg">
+            <i class="bi bi-plus-lg"></i> Create Anonymous Post
+        </a>
+    </div>
+</div>
+
+<script>
+// Demo poll functionality
+document.addEventListener('DOMContentLoaded', function() {
+    const pollOptions = document.querySelectorAll('input[name="demo_poll"]');
+    const submitBtn = document.querySelector('.anonymous-poll-submit');
+    
+    pollOptions.forEach(option => {
+        option.addEventListener('change', function() {
+            submitBtn.disabled = false;
+            submitBtn.textContent = 'Vote (Demo)';
+        });
+    });
+    
+    submitBtn.addEventListener('click', function() {
+        alert('This is a demo! In the real app, your vote would be submitted anonymously.');
+    });
+});
+</script>
+{% endblock %}

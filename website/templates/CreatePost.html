@@ -4,6 +4,51 @@
 {% block content %}
 <form method="post" enctype="multipart/form-data">
     <h3 align="center">Create a Post</h3>
+    
+    <!-- Anonymous Mode Toggle -->
+    <div class="d-flex justify-content-center mb-3">
+        <button type="button" class="anonymous-toggle" id="anonymous-toggle">
+            <span class="toggle-icon">👤</span>
+            <span class="toggle-text">Post Anonymously</span>
+        </button>
+    </div>
+    
+    <!-- Anonymous Settings -->
+    <div class="anonymous-settings" style="display: none;">
+        <h5><i class="bi bi-gear"></i> Anonymous Settings</h5>
+        
+        <div class="form-check">
+            <input class="form-check-input" type="checkbox" id="is_secret" name="is_secret">
+            <label class="form-check-label" for="is_secret">
+                <strong>Secret Post</strong> - Only visible to community moderators
+            </label>
+            <div class="form-text">This post will only be visible to moderators and admins</div>
+        </div>
+        
+        <div class="mb-3">
+            <label for="reveal_type" class="form-label">Reveal Type (Optional):</label>
+            <select class="form-select" id="reveal_type" name="reveal_type">
+                <option value="none">No reveal</option>
+                <option value="time_delayed">Time-delayed reveal</option>
+                <option value="community_vote">Reveal on vote threshold</option>
+                <option value="moderator_approved">Moderator approval required</option>
+            </select>
+        </div>
+        
+        <div class="mb-3" id="reveal_date_group" style="display: none;">
+            <label for="reveal_date" class="form-label">Reveal Date:</label>
+            <input type="datetime-local" class="form-control" id="reveal_date" name="reveal_date">
+            <div class="form-text">When should your identity be revealed?</div>
+        </div>
+        
+        <div class="mb-3" id="vote_threshold_group" style="display: none;">
+            <label for="vote_threshold" class="form-label">Vote Threshold:</label>
+            <input type="number" class="form-control" id="vote_threshold" name="vote_threshold" min="1" value="10">
+            <div class="form-text">Reveal identity when post reaches this many votes</div>
+        </div>
+        
+        <div class="anonymous-reveal-info" style="display: none;"></div>
+    </div>
     <div class="form-group">
     <label for="title">Title</label>
     <input 
@@ -56,9 +101,102 @@
     <div class="form-group">
         <input type="file" name="PIC">
     </div>
+    
+    <!-- Anonymous Poll Creation -->
+    <div class="anonymous-poll-creation" style="display: none;">
+        <h5><i class="bi bi-bar-chart"></i> Create Anonymous Poll (Optional)</h5>
+        
+        <div class="mb-3">
+            <label for="poll_question" class="form-label">Poll Question:</label>
+            <input type="text" class="form-control" id="poll_question" name="poll_question" placeholder="What do you really think?">
+        </div>
+        
+        <div class="mb-3">
+            <label class="form-label">Poll Options:</label>
+            <div id="poll_options">
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="poll_option_1" placeholder="Option 1" required>
+                    <button type="button" class="btn btn-outline-danger" onclick="removePollOption(this)">×</button>
+                </div>
+                <div class="input-group mb-2">
+                    <input type="text" class="form-control" name="poll_option_2" placeholder="Option 2" required>
+                    <button type="button" class="btn btn-outline-danger" onclick="removePollOption(this)">×</button>
+                </div>
+            </div>
+            <button type="button" class="btn btn-outline-primary btn-sm" onclick="addPollOption()">+ Add Option</button>
+        </div>
+        
+        <div class="form-check mb-3">
+            <input class="form-check-input" type="checkbox" id="poll_multiple_choice" name="poll_multiple_choice">
+            <label class="form-check-label" for="poll_multiple_choice">
+                Allow multiple choice
+            </label>
+        </div>
+        
+        <div class="mb-3">
+            <label for="poll_expires" class="form-label">Poll Expires (Optional):</label>
+            <input type="datetime-local" class="form-control" id="poll_expires" name="poll_expires">
+        </div>
+    </div>
+    
     <div class = "pt-4"></div>
     <button type="submit" class="btn btn-outline-success btn-lg">POST!</button>
 </form>
+
+<script>
+// Poll option management
+let pollOptionCount = 2;
+
+function addPollOption() {
+    pollOptionCount++;
+    const optionsContainer = document.getElementById('poll_options');
+    const newOption = document.createElement('div');
+    newOption.className = 'input-group mb-2';
+    newOption.innerHTML = `
+        <input type="text" class="form-control" name="poll_option_${pollOptionCount}" placeholder="Option ${pollOptionCount}" required>
+        <button type="button" class="btn btn-outline-danger" onclick="removePollOption(this)">×</button>
+    `;
+    optionsContainer.appendChild(newOption);
+}
+
+function removePollOption(button) {
+    if (document.querySelectorAll('#poll_options .input-group').length > 2) {
+        button.parentElement.remove();
+    }
+}
+
+// Show/hide poll creation when anonymous mode is active
+document.addEventListener('DOMContentLoaded', function() {
+    const anonymousToggle = document.getElementById('anonymous-toggle');
+    const pollCreation = document.querySelector('.anonymous-poll-creation');
+    const revealType = document.getElementById('reveal_type');
+    const revealDateGroup = document.getElementById('reveal_date_group');
+    const voteThresholdGroup = document.getElementById('vote_threshold_group');
+    
+    // Show/hide poll creation
+    function updatePollVisibility() {
+        if (anonymousToggle.classList.contains('active')) {
+            pollCreation.style.display = 'block';
+        } else {
+            pollCreation.style.display = 'none';
+        }
+    }
+    
+    // Show/hide reveal options
+    function updateRevealOptions() {
+        const type = revealType.value;
+        revealDateGroup.style.display = type === 'time_delayed' ? 'block' : 'none';
+        voteThresholdGroup.style.display = type === 'community_vote' ? 'block' : 'none';
+    }
+    
+    anonymousToggle.addEventListener('click', updatePollVisibility);
+    revealType.addEventListener('change', updateRevealOptions);
+    
+    // Initialize
+    updatePollVisibility();
+    updateRevealOptions();
+});
+</script>
 {% endblock %}
 
 

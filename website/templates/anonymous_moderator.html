@@ -1,0 +1,215 @@
+{% extends "base.html" %}
+{% block title %} Anonymous Posts Management {% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">👻 Anonymous Posts Management</h1>
+    
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="cm-card text-center">
+                <h3 class="text-primary">{{ stats.total_anonymous }}</h3>
+                <p class="mb-0">Total Anonymous</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cm-card text-center">
+                <h3 class="text-danger">{{ stats.secret_posts }}</h3>
+                <p class="mb-0">Secret Posts</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cm-card text-center">
+                <h3 class="text-success">{{ stats.revealed_posts }}</h3>
+                <p class="mb-0">Revealed Authors</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="cm-card text-center">
+                <h3 class="text-warning">{{ pending_reveals }}</h3>
+                <p class="mb-0">Pending Reveals</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="cm-card">
+        <h3>🔒 Secret Posts (Moderator Only)</h3>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Content Preview</th>
+                        <th>Community</th>
+                        <th>Date</th>
+                        <th>Author</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for post in secret_posts %}
+                    <tr class="{% if post.is_anonymous %}table-info{% endif %}">
+                        <td>
+                            <strong>{{ post.title }}</strong>
+                            {% if post.is_anonymous %}
+                                <span class="badge bg-primary ms-1">Anonymous</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ post.content[:100] }}{% if post.content|length > 100 %}...{% endif %}</td>
+                        <td>{{ post.community.name }}</td>
+                        <td>{{ post.date.strftime("%Y-%m-%d %H:%M") }}</td>
+                        <td>
+                            {% if post.is_anonymous %}
+                                <span class="anonymous-author">{{ post.anonymous_author.FirstName if post.anonymous_author else "Unknown" }}</span>
+                            {% else %}
+                                {{ post.FirstName }}
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                {% if post.is_anonymous %}
+                                    <button class="btn btn-sm btn-outline-success reveal-author-btn" data-post-id="{{ post.id }}">Reveal</button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No secret posts found</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <div class="cm-card mt-4">
+        <h3>⏰ Pending Reveals</h3>
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Post Title</th>
+                        <th>Reveal Type</th>
+                        <th>Scheduled Date</th>
+                        <th>Condition</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for reveal in pending_reveals %}
+                    <tr>
+                        <td>{{ reveal.post.title }}</td>
+                        <td>
+                            <span class="badge bg-info">{{ reveal.reveal_type.replace('_', ' ').title() }}</span>
+                        </td>
+                        <td>
+                            {% if reveal.scheduled_reveal_date %}
+                                {{ reveal.scheduled_reveal_date.strftime("%Y-%m-%d %H:%M") }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if reveal.reveal_condition %}
+                                {{ reveal.reveal_condition }}
+                            {% else %}
+                                N/A
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if reveal.should_reveal %}
+                                <span class="badge bg-success">Ready to Reveal</span>
+                            {% else %}
+                                <span class="badge bg-warning">Pending</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="btn-group" role="group">
+                                <a href="{{ url_for('post.ViewPost', post_id=reveal.post.id) }}" class="btn btn-sm btn-outline-primary">View Post</a>
+                                {% if reveal.should_reveal %}
+                                    <button class="btn btn-sm btn-outline-success approve-reveal-btn" data-reveal-id="{{ reveal.id }}">Approve Reveal</button>
+                                {% endif %}
+                            </div>
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="6" class="text-center text-muted">No pending reveals</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<script>
+function revealAuthor(postId) {
+    if (confirm('Are you sure you want to reveal the author of this post?')) {
+        fetch(`/api/anonymous/reveal/${postId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error revealing author: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error revealing author');
+        });
+    }
+}
+
+function approveReveal(revealId) {
+    if (confirm('Are you sure you want to approve this reveal?')) {
+        fetch(`/api/anonymous/approve-reveal/${revealId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error approving reveal: ' + data.message);
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error approving reveal');
+        });
+    }
+}
+
+// Add event listeners when the page loads
+document.addEventListener('DOMContentLoaded', function() {
+    // Add event listeners for reveal author buttons
+    document.querySelectorAll('.reveal-author-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const postId = this.getAttribute('data-post-id');
+            revealAuthor(postId);
+        });
+    });
+    
+    // Add event listeners for approve reveal buttons
+    document.querySelectorAll('.approve-reveal-btn').forEach(button => {
+        button.addEventListener('click', function() {
+            const revealId = this.getAttribute('data-reveal-id');
+            approveReveal(revealId);
+        });
+    });
+});
+</script>
+{% endblock %}

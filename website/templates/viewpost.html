@@ -6,9 +6,24 @@
         {% if post.flair %}
             <span class="badge" data-flair-color="{{ post.flair.color }}">{{ post.flair.name }}</span>
         {% endif %}
+        {% if post.is_anonymous %}
+            <span class="anonymous-badge">
+                <i class="bi bi-ghost icon"></i>
+                Anonymous
+            </span>
+        {% endif %}
+        {% if post.is_secret %}
+            <span class="badge bg-danger">Secret</span>
+        {% endif %}
     </h2>
-    <div class="cm-card">    
-        <p class="card-text "><small class="text-body-secondary">By <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}">{{post.FirstName}}</a>, At {{post.date.strftime("%Y-%m-%d")}}</small></p>
+    <div class="cm-card {% if post.is_anonymous %}anonymous-post{% endif %} {% if post.is_secret %}secret-post{% endif %}">    
+        <p class="card-text "><small class="text-body-secondary">By 
+            {% if post.is_anonymous %}
+                <span class="anonymous-author">Anonymous User</span>
+            {% else %}
+                <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}">{{post.FirstName}}</a>
+            {% endif %}
+            , At {{post.date.strftime("%Y-%m-%d")}}</small></p>
 
         <div class="cm-card">
             <h3 class="card-text text-wrap">{{post.content}}</h3>
