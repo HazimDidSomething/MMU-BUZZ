@@ -49,18 +49,19 @@
     </a> 
     
     <div class="pt-4"></div>
-
+    <a href= "{{ url_for('FlairsNew.Create_Flair', community_id=community.id) }}"
+      class="btn btn-outline-light">
+      Create Flairs</a>
+    <div class="pt-4"></div>      
     <form action="{{ url_for('community.delete_community', community_id=community.id) }}"
           method="POST"
           onsubmit="return confirm('Are you sure you want to delete this community? This action cannot be undone.');">
         <button type="submit" class="btn btn-danger">Delete Community</button>
     </form>
-    <div class="pt-4"></div>
-    <a href= "{{ url_for('FlairsNew.Create_Flair', community_id=community.id) }}"
-      class="btn btn-outline-light">
-      Manage Flairs
-    {% endif %}
- 
+
+    
+
+  {% endif %}
 
 {% endblock %}
 
