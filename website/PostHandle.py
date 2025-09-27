@@ -34,7 +34,7 @@ def CreatePost(community_id=None):
             community_id = community_id,
             FirstName = current_user.FirstName,
             vote = 0,
-             flair_id=flair_id if flair_id else None 
+            flair_id=flair_id if flair_id else None 
         )
         
 

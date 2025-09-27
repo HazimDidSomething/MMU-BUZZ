@@ -1,4 +1,4 @@
-from .models import Posts, PostsImg, PostComment, test, CommunityMember, User, CommunityFlair
+from .models import test, CommunityFlair
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from . import db
 from flask_login import current_user, login_required
@@ -27,6 +27,5 @@ def Create_Flair(community_id):
             db.session.commit()
             flash(f"Flair '{flair_name}' created successfully!", category="success")
             return redirect(url_for('views.home'))
-            # ^ replace 'some_blueprint.community_page' with your actual community view endpoint
 
     return render_template("Create_Flair.html", user=current_user, community=community)

@@ -17,7 +17,8 @@ class Posts(db.Model):
     status = db.Column(db.String(50), default="approved")
     reasons = db.Column(db.String(10000), nullable=True)
     flair_id = db.Column(db.Integer, db.ForeignKey("community_flairs.id"), nullable=True)
-
+    
+    flair = db.relationship("CommunityFlair", backref="posts")
     images = db.relationship("PostsImg", backref="post", lazy=True,cascade="all, delete-orphan")
     community = db.relationship("test", backref="posts", lazy=True)
 
