@@ -43,7 +43,7 @@
     <div class="form-group">
     {% if community %}
     <label for="flair_id">Choose a Flair for {{ community.name }}:</label>
-    <select class="form-control" id="flair_id" name="flair_id" required>
+    <select class="form-control" id="flair_id" name="flair_id" >
         <option value="">-- Select a flair --</option>
         {% for flair in flairs %}
             <option value="{{ flair.id }}">
