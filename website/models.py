@@ -83,6 +83,7 @@ class CommunityMember(db.Model):
     joined_at = db.Column(db.DateTime(timezone=True), default=func.now())
     community_role = db.Column(db.String(50), default="member")
 
+    user = db.relationship("User", backref="memberships")
     
 
 class feedback(db.Model):

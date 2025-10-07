@@ -174,3 +174,29 @@ def report_post(post_id):
 
     return render_template("report_post.html", post=post, user=current_user)
 
+@PostHandle.route("/post/GetCommunityId", methods=['POST', 'GET'])
+@login_required
+def get_community_id():
+    # Get all communities the current user has joined
+    joined_communities = (
+        CommunityMember.query
+        .filter_by(user_id=current_user.id)
+        .join(test, CommunityMember.community_id == test.id)
+        .add_entity(test)
+        .all()
+    )
+
+    # If the user has not joined any community
+    if not joined_communities:
+        flash("You need to join a community before creating a post.", "error")
+        return redirect(url_for("views.home"))
+
+    if request.method == "POST":
+        community_id = request.form.get("community_id")
+        if community_id:
+            return redirect(url_for("post.CreatePost", community_id=community_id))
+
+    # Extract the actual community objects
+    communities = [c[1] for c in joined_communities]
+    return render_template("GetCommunity.html", user=current_user, communities=communities)
+

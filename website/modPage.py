@@ -1,6 +1,6 @@
 from flask import Blueprint ,render_template,request,flash,redirect,flash,url_for
 from . import db
-from .models import User , test, Posts , feedback
+from .models import User , test, Posts , feedback ,CommunityMember
 from flask_login import login_required, current_user
 
 modPage = Blueprint('modPage',__name__)
@@ -17,8 +17,9 @@ def show_db_info():
         posts_num = Posts.query.count() 
         user_num = User.query.count()
         feedbacks  = feedback.query.all()
+        Members = CommunityMember.query.all()
 
-        return render_template("modPage.html",feedbacks=feedbacks, user=current_user, users=users, user_num=user_num , communities=communities, community_num=community_num, posts=posts, posts_num=posts_num)
+        return render_template("modPage.html",feedbacks=feedbacks, user=current_user, users=users, user_num=user_num , communities=communities, community_num=community_num, posts=posts, posts_num=posts_num ,Members=Members )
 
 @modPage.route('/feedback', methods=['GET','POST'])
 @login_required

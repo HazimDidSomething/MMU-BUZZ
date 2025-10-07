@@ -34,6 +34,24 @@
 
             <h3>Posts:</h3>
             <p>Total posts: {{ posts_num }}</p>
+            <h3>Members:</h3>
+            <div class="list-group">
+                {% for Member in Members %}
+                    <div class="list-group-item">
+                        <h5 class="mb-1">{{ Member.user.FirstName }}</h5>
+                        <p class="mb-1">
+                            Joined community: <strong>{{ Member.community.name }}</strong>
+                        </p>
+                        <small>
+                            Role: {{ Member.community_role }} |
+                            Joined at: {{ Member.joined_at.strftime("%Y-%m-%d") }}
+                        </small>
+                    </div>
+                {% endfor %}
+            </div>
+
+
+            </ul>
         </div>
 
         

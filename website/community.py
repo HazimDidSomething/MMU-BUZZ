@@ -12,12 +12,14 @@ def view_community(community_id):
     community = test.query.get_or_404(community_id)
     posts = Posts.query.filter_by(community_id=community.id).filter_by(status="approved").order_by(Posts.date.desc()).all()
     members = CommunityMember.query.filter_by(community_id=community.id).all()
+    member = CommunityMember.query.filter_by(user_id=current_user.id, community_id=community.id).first()
     is_admin = CommunityMember.query.filter_by(
         community_id=community.id,
         user_id=current_user.id,
         community_role="admin"
     ).first() is not None
-    return render_template("view_community.html", community=community, posts=posts, members=members, user=current_user, is_admin=is_admin)
+    is_member = member is not None
+    return render_template("view_community.html", community=community, posts=posts, members=members, user=current_user, is_admin=is_admin , is_member=is_member)
 
 @community.route("/create_community", methods=["GET", "POST"])
 def create_community():
@@ -137,3 +139,32 @@ def view_reported_posts(community_id):
     ).order_by(Posts.date.desc()).all()
 
     return render_template("view_report.html",community=community,reports=reports,user=current_user,)
+
+@community.route("/community/<int:community_id>/join", methods=["POST"])
+def join_community(community_id):
+    community = test.query.get_or_404(community_id)
+    existing_membership = CommunityMember.query.filter_by(user_id=current_user.id, community_id=community.id).first()
+
+    if existing_membership:
+        flash("You are already a member of this community.", "info")
+    else:
+        new_membership = CommunityMember(user_id=current_user.id, community_id=community.id)
+        db.session.add(new_membership)
+        db.session.commit()
+        flash(f"You have joined the community '{community.name}'!", "success")
+
+    return redirect(url_for("community.view_community", community_id=community.id))
+
+@community.route("/community/<int:community_id>/leave", methods=["POST"])
+def leave_community(community_id):
+    community = test.query.get_or_404(community_id)
+    membership = CommunityMember.query.filter_by(user_id=current_user.id, community_id=community.id).first()
+
+    if not membership:
+        flash("You are not a member of this community.", "info")
+    else:
+        db.session.delete(membership)
+        db.session.commit()
+        flash(f"You have left the community '{community.name}'.", "success")
+
+    return redirect(url_for("community.view_all_communities"))

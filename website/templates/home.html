@@ -1,55 +1,96 @@
 {% extends "base.html" %} 
 {% block title %} Home {% endblock %}
 
+
+{% block sidenav_l %}
+  <h3 align = "center" >Joined </h3>
+  {% for community in joined_communities %}
+    <a href="{{ url_for('community.view_community', community_id=community.id) }}"
+      class="btn btn-outline-light w-100 mb-2">
+      {{ community.name }}
+    </a>
+  {% else %}
+    <p>Join a community...</p>
+  {% endfor %}
+{% endblock %}
+
+<div>
 {% block content %}
 <div>
+  <h1 class="mb-4">Latest Posts</h1>
 
-
-
-
-
-  <h1 class = "mb-4">Latest Post</h1>
-  <div >
-  {% for post in posts %}
-    <div class="cm-card">
-      <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-        <div class="p-3 cm-card h-100 w-100 shadow-sm">
-          <h5 class="mb-0 text" style="word-wrap: break-word; overflow-wrap: break-word;">
-              {{ post.title }}
-          </h5>
-          <small class="text-body-secondary  d-block" style="word-wrap: break-word; overflow-wrap: break-word;"><p>By
-              <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}" class="fw-bold"> {{ post.FirstName }}</a> 
-              in <a href="{{ url_for('community.view_community', community_id=post.community.id) }}" class="fw-bold">{{ post.community.name }}</a>, 
-              At {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}
-          </p></small>
-          <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
-          <h6 class="card-text">{{ post.content }}</h6>
-          {% if post.images %}
-            <img src="{{ post.images[0].name }}" alt="Post image" class="img-fluid rounded" width="300">
-          {% endif %}
-          {% if post.flair %}
-            <span class="badge ms-2" style="background-color: {{ post.flair.color }}">
-          {{ post.flair.name }}
-            </span>
-          {% endif %}
-        </div>
-      </a>
-    </div>
+  <div class="mb-3 d-flex gap-2">
+    <a href="{{ url_for('views.home', view='all') }}" 
+       class="btn {% if view_type == 'all' %}btn-primary{% else %}btn-outline-light{% endif %}">
+       All Posts
     </a>
-    <div class="pt-4"></div>
+
+    <a href="{{ url_for('views.home', view='joined') }}" 
+       class="btn {% if view_type == 'joined' %}btn-primary{% else %}btn-outline-light{% endif %}">
+       Joined Communities
+    </a>
+
+    <a href="{{ url_for('views.home', view='announcements') }}" 
+       class="btn {% if view_type == 'announcements' %}btn-primary{% else %}btn-outline-light{% endif %}">
+       Announcements
+    </a>
+  </div>
+  <div >
+  {% if view_type == 'joined' and not joined_communities %}
+  <p>
+    You haven’t joined any communities yet!  
+    <a href="{{ url_for('community.view_all_communities') }}" class="btn btn-outline-info">
+      Explore Communities
+    </a>
+  </p>
+  {% elif not posts %}
+    <p>No posts yet. Be the first to           
+      <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
+        Create One !
+      </a>
+    </p>
   {% else %}
-        <p>No posts yet. Be the first to           
-            <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
-                    Create One !
-                </a></p>
-  {% endfor %}
+    {% for post in posts %}
+      <div class="cm-card">
+        <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
+          <div class="p-3 cm-card h-100 w-100 shadow-sm">
+            <h5 class="mb-0 text" style="word-wrap: break-word; overflow-wrap: break-word;">
+                {{ post.title }}
+            </h5>
+            <small class="text-body-secondary  d-block" style="word-wrap: break-word; overflow-wrap: break-word;"><p>By
+                <a href="{{ url_for('Profile.show_user_profile', user_id=post.user_id) }}" class="fw-bold"> {{ post.FirstName }}</a> 
+                in <a href="{{ url_for('community.view_community', community_id=post.community.id) }}" class="fw-bold">{{ post.community.name }}</a>, 
+                At {{ post.date.strftime("%Y-%m-%d %H:%M:%S") }}
+            </p></small>
+            <a href="{{ url_for('post.ViewPost', post_id=post.id) }}" class="text-decoration-none text-dark">
+            <h6 class="card-text">{{ post.content }}</h6>
+            {% if post.images %}
+              <img src="{{ post.images[0].name }}" alt="Post image" class="img-fluid rounded" width="300">
+            {% endif %}
+            {% if post.flair %}
+              <span class="badge ms-2" style="background-color: {{ post.flair.color }}">
+            {{ post.flair.name }}
+              </span>
+            {% endif %}
+          </div>
+        </a>
+      </div>
+      </a>
+      <div class="pt-4"></div>
+    {% else %}
+          <p>No posts yet. Be the first to           
+              <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-info">
+                      Create One !
+                  </a></p>
+    {% endfor %}
+  {% endif %}
   </div>
 
 </div>
 {% endblock %}
 
 {% block sidenav %}
-<h2>JOIN NOW !!</h2>
+<h2 align = "center">JOIN NOW !!</h2>
 
   {% for community in communities %}
     <a href="{{ url_for('community.view_community', community_id=community.id) }}"

@@ -36,12 +36,20 @@
 
   <h1 align ="center">{{ community.name }}</h1>
   <p>description : {{ community.description }}</p>
-
-
+  {% if not is_member %}
+    <form action="{{ url_for('community.join_community', community_id=community.id) }}" method="POST">
+      <button type="submit" class="btn btn-success mb-3 w-100">Join Community</button>
+    </form>
+  {% else %}
   <a href="{{ url_for('post.CreatePost', community_id=community.id) }}" 
     class="btn btn-success mb-3">
     Create Post
-  </a>
+  </a>  
+    <div class="pt-4"></div>
+  <form action="{{ url_for('community.leave_community', community_id=community.id) }}" method="POST">
+    <button type="submit" class="btn btn-outline-danger mb-3 w-100">Leave Community</button>
+  </form>
+  {% endif %}
   {% if is_admin or current_user.Role == "moderator" %}
   
     <a href="{{ url_for('community.view_reported_posts', community_id=community.id) }}"

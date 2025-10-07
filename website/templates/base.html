@@ -40,7 +40,7 @@
             <!-- this will be shown on the right side on the nav bar -->
                 <div class="navbar-nav ms-auto mb-2 mb-lg-0">
                 {%if user.is_authenticated%}
-                <a href="{{ url_for('post.CreatePost') }}" class="btn btn-outline-light">
+                <a href="{{ url_for('post.get_community_id') }}" class="btn btn-outline-light">
                     <i class="bi bi-plus-lg"></i>POST
                 </a>
                 <div class="px-2"></div>
@@ -60,8 +60,12 @@
             
         </nav>
         <div class="d-flex flex-grow-1">
+            <!-- Sidebar on the Left -->
             <nav class="d-none d-lg-flex flex-column flex-shrink-0 p-3 cm-nav" style="width: 160px; height: 100vh;">
             <ul class="nav nav-pills flex-column mb-auto">
+                {% block sidenav_l %}
+
+                {% endblock %}
             </ul>
             </nav>
         <!-- Main Content -->
@@ -99,7 +103,7 @@
             </ul>
             </nav>
             
-            
+            <!-- Bottom Navigation for Mobile -->
             {% if user.is_authenticated %}
             <nav class="navbar fixed-bottom d-flex d-lg-none justify-content-around p-2 cm-nav">
                 <a href="/AllCommunity" class="btn btn-outline-light flex-fill mx-1">

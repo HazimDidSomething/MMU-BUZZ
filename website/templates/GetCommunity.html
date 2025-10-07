@@ -1,0 +1,25 @@
+{% extends "base.html" %} 
+{% block title %} Create Post {% endblock %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+    <h3 align="center">Choose Community</h3>
+    <div class="form-group">
+    {% if community %}
+        <label for="community_id">Community name: {{community.name}}</label>
+        <input type="hidden" name="community_id" value="{{community.id}}">
+    {% else %}
+        <label for="community_id">Select Community:</label>
+        <select class="form-control" id="community_id" name="community_id" required>
+            <option value="">Choose a community...</option>
+            {% for comm in communities %}
+                <option value="{{comm.id}}">{{comm.name}}</option>
+            {% endfor %}
+        </select>
+    {% endif %}
+    <div class = "pt-4"></div>
+    <button type="submit" class="btn btn-outline-success btn-lg">Choose</button>
+</form>
+{% endblock %}
+
+
