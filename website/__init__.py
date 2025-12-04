@@ -6,6 +6,9 @@ from sqlalchemy import text
 from flask_migrate import Migrate , upgrade
 from flask_mail import Mail, Message
 
+from dotenv import load_dotenv
+load_dotenv()  # Must be before accessing any environment variables
+
 
 
 db = SQLAlchemy()
@@ -15,9 +18,8 @@ import os
 
 def create_app():
     app = Flask(__name__)
-    app.config['SECRET_KEY'] = "[|_MMU_)(!BUZZ#)-=1?[|]"
-    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("DATABASE_URL", "postgresql://db_kscb_user:7ImyweYIfxkgFalUtfyvESGnanwafCzG@dpg-d33gn6ripnbc73e0abtg-a.oregon-postgres.render.com/db_kscb")
-
+    app.config['SECRET_KEY'] = os.getenv("SECRET_KEY")
+    app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("SUPABASE_DB_URL")
     db.init_app(app)
     from . import models 
     migrate = Migrate(app, db)
@@ -32,12 +34,14 @@ def create_app():
     from .models import User, test, CommunityMember, Posts, PostsImg, PostComment
     
     with app.app_context():
+        db.create_all()
+        '''
         try:
             upgrade()
             print(" Database upgraded successfully!")
         except Exception as e:
             print(f"Could not upgrade database: {e}")
-        '''
+        
     TO NUKE THE DB
         if os.getenv("RESET_DB", "false").lower() == "true":
             db.session.execute(text("DROP SCHEMA public CASCADE"))
